@@ -1,6 +1,7 @@
 import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
+import {Util} from "../Util";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -19,7 +20,12 @@ export class PlayerCharacter extends Character {
             console.log(`SHOOT ${this.camera.globalPosition}`);
             this.shootCharge = 0;
 
-            this.actorManager!.add(new PlayerProjectile(this.camera.globalPosition, this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40)))
+            this.actorManager!.add(new PlayerProjectile(this.camera.globalPosition, this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40)));
+
+            Util.rayTest(this.scene,
+                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
+                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40))
+            );
         }
     }
 

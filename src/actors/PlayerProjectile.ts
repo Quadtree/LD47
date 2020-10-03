@@ -1,5 +1,6 @@
 import {Projectile} from "./Projectile";
 import {AbstractMesh, Color3, MeshBuilder, Scene, StandardMaterial} from "@babylonjs/core";
+import {Actor} from "../am/Actor";
 
 export class PlayerProjectile extends Projectile {
     protected makeMesh(scene: Scene): AbstractMesh {
@@ -15,5 +16,10 @@ export class PlayerProjectile extends Projectile {
 
     protected disposeMesh(mesh: AbstractMesh) {
         mesh.dispose(false, true);
+    }
+
+
+    protected canHit(actor: Actor): boolean {
+        return false;
     }
 }

@@ -64,7 +64,7 @@ export class Character extends Actor
         return this.toBJVector3(v3);
     }
 
-    public constructor(private scene:Scene, private canvas:HTMLCanvasElement|null){
+    public constructor(protected scene:Scene, private canvas:HTMLCanvasElement|null){
         super()
 
         this.camera = new FreeCamera('', new Vector3(), this.scene);
