@@ -88,21 +88,21 @@ export class GameMain {
             let marker = false;
             if (child.name == "RedCardConsole"){
                 console.log("Found RedCardConsole")
-                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Red));
+                this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Red));
                 marker = true;
             }
             if (child.name == "GreenCardConsole"){
                 console.log("Found GreenCardConsole")
-                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Green));
+                this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Green));
                 marker = true;
             }
             if (child.name == "BlueCardConsole"){
                 console.log("Found BlueCardConsole")
-                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Blue));
+                this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Blue));
                 marker = true;
             }
             if (child.name == "ExitDoor"){
-                this.actorManager.add(new ExitDoor(child.position));
+                this.actorManager.add(new ExitDoor(markerLocation));
                 marker = true;
             }
             if (child.name.includes("EnemySpawn")){
