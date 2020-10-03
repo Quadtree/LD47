@@ -23,6 +23,7 @@ import {ExitDoor} from "./actors/ExitDoor";
 import {EnemySpawnPoint} from "./actors/EnemySpawnPoint";
 import {GLTFFileLoader} from "@babylonjs/loaders";
 import {PowerUp, PowerUpType} from "./actors/PowerUp";
+import {Enemy} from "./actors/Enemy";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -70,6 +71,10 @@ export class GameMain {
     private sphere:any;
 
     async init(){
+        await Promise.all([
+            Enemy.load(this._scene),
+        ]);
+
         await this.createMeshTerrain();
     }
 

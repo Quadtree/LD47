@@ -3,6 +3,7 @@ import {AbstractMesh, MeshBuilder, Scene, Vector3} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
 import {EnemyProjectile} from "./EnemyProjectile";
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 
 export class Enemy extends Character {
     public removed:boolean = false;
@@ -13,13 +14,22 @@ export class Enemy extends Character {
 
     private attackCharge:number = 0;
 
+    private static baseMesh:AbstractMesh|null;
+
+    public static async load(scene:Scene){
+        this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/small_enemy.glb', '', scene)).meshes[0];
+        this.baseMesh.getChildMeshes().forEach(it => it.isVisible = false);
+    }
+
     public constructor(scene:Scene, startPosition:Vector3) {
         super(scene, null, startPosition);
         console.log(`Enemy spawned @ ${startPosition}`)
 
-        this.mesh = MeshBuilder.CreateBox("", {size: 1}, this.scene);
+        //this.mesh = MeshBuilder.CreateBox("", {size: 1}, this.scene);
 
-
+        this.mesh = Enemy.baseMesh!.clone("", null, false)!
+        this.mesh.getChildMeshes().forEach(it => it.isVisible = true);
+        this.mesh.scaling = new Vector3(0.6, 0.6, 0.6);
     }
 
 
@@ -38,21 +48,23 @@ export class Enemy extends Character {
             const towardsEnemyNormalized = deltaPos.scale(-1).normalize();
 
             if (!Util.rayTest(this.scene, this.pos.add(towardsPCNormalized.scale(2)), pc.pos.add(towardsEnemyNormalized.scale(2)))){
-                if (deltaPos.length() > 12){
+                this.camera.rotation.y = Math.atan2(deltaPos.x, deltaPos.z);
+
+                if (deltaPos.length() > 8){
                     this.moveForward = true;
                 } else {
                     this.moveForward = false;
                 }
 
-                this.camera.rotation.y = Math.atan2(deltaPos.x, deltaPos.z);
-
                 canSeePC = true;
                 this.attackCharge += delta;
 
                 if (this.attackCharge >= 1){
+                    const shotSrc = this.pos.add(new Vector3(0, -0.55, 0));
+
                     this.actorManager!.add(new EnemyProjectile(
-                        this.pos,
-                        pc.pos.subtract(this.pos).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
+                        shotSrc,
+                        pc.pos.subtract(shotSrc).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
                         this.actorManager!.currentDifficultySettings.enemyDamage
                     ));
                     this.attackCharge = 0;
@@ -62,8 +74,8 @@ export class Enemy extends Character {
 
         if (!canSeePC) this.attackCharge = 0;
 
-        this.mesh.position.copyFrom(this.pos);
-        this.mesh.rotation.copyFrom(this.camera.rotation);
+        this.mesh.position.copyFrom(this.pos.add(new Vector3(0, -2, 0)));
+        this.mesh.rotation = this.camera.rotation.clone();
     }
 
     keep(): boolean {
