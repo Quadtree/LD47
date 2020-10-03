@@ -122,7 +122,7 @@ export class TerrainDemo {
         //this.actorManager.add(this.character)
         //this.character.position = new Vector3(0, 20, 3)
 
-        let chr = new Character(this._scene, this._canvas);
+        let chr = new Character(this._scene, this._canvas, new Vector3(0,0,0));
         this.actorManager.add(chr);
     }
 

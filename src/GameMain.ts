@@ -98,6 +98,11 @@ export class GameMain {
                 this.actorManager.add(new ExitDoor(child.position));
                 marker = true;
             }
+            if (child.name.includes("EnemySpawn")){
+                console.log("Found EnemySpawn")
+                this.actorManager.add(new EnemySpawnPoint(child.position.scale(-1)));
+                marker = true;
+            }
 
             if (marker){
                 child.dispose();
@@ -105,65 +110,10 @@ export class GameMain {
         }
 
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
-
-        EnemySpawnPoint.respawnAll(this.actorManager);
+        this.needsSpawn = true;
     }
 
-    createHeightmapTerrain():Promise<string> {
-        return new Promise<string>((res, rej) => {
-            let ground2 = MeshBuilder.CreateGroundFromHeightMap("noise", "assets/some_noise.png", {
-                width: 512,
-                height: 512,
-                subdivisions: 256,
-                maxHeight: 10,
-
-                onReady: () => {
-                    console.log('reeeedddaaaaahhh')
-                    ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene)
-
-                    ground2.physicsImpostor.executeNativeFunction((world:any, physicsBody:any) => {
-                        console.log(world);
-                        console.log(physicsBody);
-                    });
-
-                    ground2.checkCollisions = true
-                    ground2.isPickable = true
-                    ground2.receiveShadows = true
-                    ground2.freezeWorldMatrix()
-                    this.shadowGenerator.addShadowCaster(ground2)
-                    console.log('we dun')
-                    res();
-                }
-            }, this._scene);
-        });
-
-    }
-
-    createBox(vec3:Vector3, mass:number = 0){
-        const playerMesh = MeshBuilder.CreateBox('A BOX', {width:1, height:1, depth:1})
-        playerMesh.physicsImpostor = new PhysicsImpostor(playerMesh, PhysicsImpostor.BoxImpostor, {mass: mass}, this._scene);
-        playerMesh.position = vec3
-    }
-
-    setupPhysicsViewer(){
-        var physicsViewer = new PhysicsViewer(this._scene);
-
-        const showImposters = (mesh:AbstractMesh) =>{
-            for(let cm of mesh.getChildMeshes()){
-                showImposters(cm);
-            }
-
-            if (mesh.physicsImpostor) {
-                console.log(`showing imposters for ${mesh.name}`);
-                physicsViewer.showImpostor(mesh.physicsImpostor, mesh as any);
-                //mesh.visibility = 0;
-            } else {
-                console.log(`NOT showing imposters for ${mesh.name}`);
-            }
-        }
-
-        this._scene.meshes.forEach(showImposters);
-    }
+    private needsSpawn:boolean = false;
 
     async doRender() {
         // Run the render loop.
@@ -172,6 +122,11 @@ export class GameMain {
             this._scene.render();
 
             this.actorManager.update(0.016)
+
+            if (this.needsSpawn){
+                EnemySpawnPoint.respawnAll(this.actorManager);
+                this.needsSpawn = false;
+            }
 
             //console.log(`mesh count ${this._scene.meshes.length}`);
         });

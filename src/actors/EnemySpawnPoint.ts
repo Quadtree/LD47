@@ -18,6 +18,7 @@ export class EnemySpawnPoint extends Actor {
     }
 
     static respawnAll(am:ActorManager){
+        console.log("SPAWN ALL");
         for (const a of am.actors){
             if (a instanceof Enemy){
                 a.removed = true;
