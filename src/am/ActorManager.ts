@@ -93,4 +93,10 @@ export class ActorManager
     public get totalActorCount():number {
         return this.actors.length + this.actorAddQueue.length;
     }
+
+    public currentDifficultySettings = {
+        enemyDamage: 0.1,
+        playerDamage: 0.3,
+        energyCostPerShot: 0.06,
+    }
 }
