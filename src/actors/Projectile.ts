@@ -1,10 +1,11 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, Scene, Vector3} from "@babylonjs/core";
+import {AbstractMesh, PointLight, Scene, StandardMaterial, Vector3} from "@babylonjs/core";
 import {Util} from "../Util";
 import {Character} from "./Character";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
+    private light:PointLight|null = null;
 
     private life:number = 10;
 
@@ -24,6 +25,13 @@ export abstract class Projectile extends Actor {
         this.mesh = this.makeMesh(scene);
         this.mesh.position.copyFrom(this.pos);
 
+        if (this.mesh.material instanceof StandardMaterial){
+            this.light = new PointLight("", this.pos, scene);
+            this.light.intensity = 5;
+            this.light.diffuse = this.mesh.material.emissiveColor;
+            this.light.specular = this.mesh.material.emissiveColor;
+        }
+
         this.scene = scene;
     }
 
@@ -31,13 +39,22 @@ export abstract class Projectile extends Actor {
         super.exitingView();
 
         this.mesh!.dispose();
+
+        if (this.light){
+            this.light.dispose(false, true);
+            this.light = null;
+        }
     }
 
 
     update(delta: number) {
         super.update(delta);
 
-        this.mesh!.position.addInPlace(this.vel.scale(delta));
+        this.mesh!.position.addInPlace(this.vel.scale(delta))
+
+        if (this.light){
+            this.light.position.copyFrom(this.mesh!.position);
+        }
 
         this.life -= delta;
 
