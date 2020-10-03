@@ -24,7 +24,7 @@ export class PlayerCharacter extends Character {
 
             Util.rayTest(this.scene,
                 this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
-                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40))
+                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(4))
             );
         }
     }
