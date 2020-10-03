@@ -19,6 +19,7 @@ import {Character} from './actors/Character';
 import {Color3} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
+import {ExitDoor} from "./actors/ExitDoor";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -90,6 +91,10 @@ export class GameMain {
             if (child.name == "BlueCardConsole"){
                 console.log("Found BlueCardConsole")
                 this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Blue));
+                marker = true;
+            }
+            if (child.name == "ExitDoor"){
+                this.actorManager.add(new ExitDoor(child.position));
                 marker = true;
             }
 

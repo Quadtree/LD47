@@ -11,6 +11,7 @@ import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Actor } from "../am/Actor";
 import { Keys } from "../Keys";
+import {CardConsoleColor} from "./CardConsole";
 
 declare var Ammo:any;
 
@@ -54,6 +55,8 @@ export class Character extends Actor
 
     private isAdded = true;
     private addCharge = 1;
+
+    public cards:CardConsoleColor[] = [];
 
     public get pos(){
         let v3 = this.character.getGhostObject().getWorldTransform().getOrigin();

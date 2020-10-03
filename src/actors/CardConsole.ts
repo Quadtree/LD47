@@ -49,6 +49,7 @@ export class CardConsole extends Actor {
             if (pc.pos.subtract(this.mesh.position).length() < 2){
                 console.log(`Collecting ${this.cardConsoleColor}`)
                 this.collected = true
+                pc.cards.push(this.cardConsoleColor);
             }
         }
     }
