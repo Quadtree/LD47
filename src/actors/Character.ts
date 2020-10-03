@@ -127,16 +127,24 @@ export class Character extends Actor
             this.scene.onPointerObservable.add((ed:PointerInfo, es:EventState) => {
                 if (ed.type == PointerEventTypes.POINTERTAP && ed.event instanceof PointerEvent){
                     this.canvas!.requestPointerLock();
+                }
+                if (ed.type == PointerEventTypes.POINTERDOWN){
                     if (!this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)){
-                        //console.log(`hasPointerCapture=${this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)}`);
                         this.pointerDown();
                     }
+                }
+                if (ed.type == PointerEventTypes.POINTERUP){
+                    this.pointerUp();
                 }
             });
         }
     }
 
     protected pointerDown(){
+
+    }
+
+    protected pointerUp(){
 
     }
 
