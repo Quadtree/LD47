@@ -69,21 +69,23 @@ export class Util
         );
     }
 
-    static rayTest(scene:Scene, from:Vector3, to:Vector3){
+    static rayTest(scene:Scene, from:Vector3, to:Vector3):boolean {
         let ajsp = scene.getPhysicsEngine()!.getPhysicsPlugin() as AmmoJSPlugin
 
         const world = ajsp.world;
 
-        console.log(world.rayTest);
+        //console.log(world.rayTest);
 
-        console.log(Ammo);
+        //console.log(Ammo);
 
         const cb = new Ammo.ClosestRayResultCallback();
 
         world.rayTest(Util.toBLVector3(from), Util.toBLVector3(to), cb);
 
-        console.log(cb.m_collisionObject);
+        //console.log(cb.m_collisionObject);
 
-        console.log("RAY TEST DONE");
+        //console.log("RAY TEST DONE");
+
+        return cb.m_collisionObject.ptr != 0;
     }
 }
