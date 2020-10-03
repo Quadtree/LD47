@@ -84,10 +84,12 @@ export class GameMain {
             }
             if (child.name == "GreenCardConsole"){
                 console.log("Found GreenCardConsole")
+                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Green));
                 marker = true;
             }
             if (child.name == "BlueCardConsole"){
                 console.log("Found BlueCardConsole")
+                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Blue));
                 marker = true;
             }
 
