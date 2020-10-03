@@ -54,6 +54,8 @@ export class Character extends Actor
     private isAdded = true;
     private addCharge = 1;
 
+    private ghostObject:any;
+
     public cards:CardConsoleColor[] = [];
 
     public get pos(){
@@ -85,6 +87,7 @@ export class Character extends Actor
         startTransform.setOrigin(this.toBLVector3(position));
 
         let m_ghostObject = new Ammo.btPairCachingGhostObject();
+        this.ghostObject = m_ghostObject;
         m_ghostObject.setWorldTransform(startTransform);
         ajsp.world.getBroadphase().getOverlappingPairCache().setInternalGhostPairCallback(new Ammo.btGhostPairCallback());
         const characterHeight=1.75;
@@ -195,6 +198,19 @@ export class Character extends Actor
 
         if (this.canvas)
             debugUiText.text = `angle=${this.camera.rotation.y}\npos=${this.formatVector(v3)}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
+    }
+
+
+    exitingWorld() {
+        super.exitingWorld();
+
+        if (this.isAdded){
+            this.scene.getPhysicsEngine()!.getPhysicsPlugin().world.removeAction(this.character);
+            this.isAdded = false;
+        }
+
+        const ajsp = this.scene.getPhysicsEngine()!.getPhysicsPlugin() as AmmoJSPlugin
+        ajsp.world.removeCollisionObject(this.ghostObject);
     }
 
     private formatVector(v3:btVector3, fixedPlaces:number = 1){

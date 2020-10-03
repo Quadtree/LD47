@@ -72,4 +72,11 @@ export class Enemy extends Character {
         console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
         return amount;
     }
+
+
+    exitingView() {
+        super.exitingView();
+
+        this.mesh.dispose(false, true);
+    }
 }
