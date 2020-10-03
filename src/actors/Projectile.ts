@@ -19,7 +19,8 @@ export abstract class Projectile extends Actor {
         this.mesh = this.makeMesh(scene);
         this.mesh.position.copyFrom(this.pos);
 
-        this.mesh.physicsImpostor = new PhysicsImpostor(this.mesh, PhysicsImpostor.SphereImpostor, {mass: 1, velocityIterations: 10, positionIterations: 10}, scene);
+        this.mesh.physicsImpostor = new PhysicsImpostor(this.mesh, PhysicsImpostor.SphereImpostor, {mass: 1, velocityIterations: 10, positionIterations: 10, margin: 0.2}, scene);
+        this.mesh.physicsImpostor.setLinearVelocity(this.vel);
     }
 
     exitingView() {
@@ -32,7 +33,7 @@ export abstract class Projectile extends Actor {
     update(delta: number) {
         super.update(delta);
 
-        this.mesh!.position.addInPlace(this.vel.scale(delta));
+        //this.mesh!.position.addInPlace(this.vel.scale(delta));
 
         this.life -= delta;
     }
