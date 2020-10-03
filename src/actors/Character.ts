@@ -9,8 +9,8 @@ import { PointerInfo } from "@babylonjs/core/Events/pointerEvents";
 import { Scene } from "@babylonjs/core/scene";
 import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { Actor } from "./am/Actor";
-import { Keys } from "./Keys";
+import { Actor } from "../am/Actor";
+import { Keys } from "../Keys";
 
 declare var Ammo:any;
 
@@ -62,6 +62,8 @@ export class Character extends Actor
         //this.camera.fov = 75;
         this.camera.minZ = 0.1;
         this.camera.maxZ = 100;
+        this.camera.inertia = 0;
+        this.camera.angularSensibility = 400;
         console.log(`fov=${this.camera.fov}`);
         if (this.canvas){
             this.camera.attachControl(this.canvas, false);
@@ -93,26 +95,26 @@ export class Character extends Actor
         ajsp.world.addCollisionObject(m_ghostObject, CharacterFilter, StaticFilter|DefaultFilter);
         ajsp.world.addAction(m_character);
 
-        this.scene.onKeyboardObservable.add((ed:KeyboardInfo, es:EventState) => {
-            if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP){
-                const evt = ed.event as KeyboardEvent;
-                const down = ed.type == KeyboardEventTypes.KEYDOWN;
-                if (evt.keyCode == Keys.W) this.moveForward = down;
-                if (evt.keyCode == Keys.S) this.moveBackward = down;
-                if (evt.keyCode == Keys.A) this.moveLeft = down;
-                if (evt.keyCode == Keys.D) this.moveRight = down;
-                if (evt.keyCode == Keys.Space) this.jump = down;
-            }
-        });
-
-        debugUi = AdvancedDynamicTexture.CreateFullscreenUI('', true, this.scene);
-        debugUiText = new TextBlock('', 'test')
-        debugUi.addControl(debugUiText)
-        debugUiText.left = -600
-        debugUiText.top = -600
-        debugUiText.color = '#ffffff'
-
         if (this.canvas){
+            this.scene.onKeyboardObservable.add((ed:KeyboardInfo, es:EventState) => {
+                if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP){
+                    const evt = ed.event as KeyboardEvent;
+                    const down = ed.type == KeyboardEventTypes.KEYDOWN;
+                    if (evt.keyCode == Keys.W) this.moveForward = down;
+                    if (evt.keyCode == Keys.S) this.moveBackward = down;
+                    if (evt.keyCode == Keys.A) this.moveLeft = down;
+                    if (evt.keyCode == Keys.D) this.moveRight = down;
+                    if (evt.keyCode == Keys.Space) this.jump = down;
+                }
+            });
+
+            debugUi = AdvancedDynamicTexture.CreateFullscreenUI('', true, this.scene);
+            debugUiText = new TextBlock('', 'test')
+            debugUi.addControl(debugUiText)
+            debugUiText.left = -600
+            debugUiText.top = -600
+            debugUiText.color = '#ffffff'
+
             this.scene.onPointerObservable.add((ed:PointerInfo, es:EventState) => {
                 if (ed.type == PointerEventTypes.POINTERTAP){
                     this.canvas!.requestPointerLock();

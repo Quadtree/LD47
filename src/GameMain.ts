@@ -20,8 +20,9 @@ import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import { Keys } from './Keys';
 import { ActorManager } from './am/ActorManager';
-import { Character } from './Character';
+import { Character } from './actors/Character';
 import {Color3} from "@babylonjs/core";
+import {PlayerCharacter} from "./actors/PlayerCharacter";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -62,7 +63,7 @@ export class GameMain {
 
         this.actorManager.scene = this._scene
 
-        let chr = new Character(this._scene, this._canvas);
+        let chr = new PlayerCharacter(this._scene, this._canvas);
         this.actorManager.add(chr);
     }
 

@@ -20,7 +20,7 @@ import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import { Keys } from './Keys';
 import { ActorManager } from './am/ActorManager';
-import { Character } from './Character';
+import { Character } from './actors/Character';
 
 
 
