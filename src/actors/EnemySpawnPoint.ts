@@ -17,14 +17,15 @@ export class EnemySpawnPoint extends Actor {
         this.scene = scene;
     }
 
-    static respawnAll(am:ActorManager){
-        console.log("SPAWN ALL");
+    static despawnAll(am:ActorManager){
         for (const a of am.actors){
             if (a instanceof Enemy){
                 a.removed = true;
             }
         }
+    }
 
+    static respawnAll(am:ActorManager){
         for (const a of am.actors){
             if (a instanceof EnemySpawnPoint){
                 am.add(new Enemy(a.scene!, a.pos))

@@ -64,6 +64,10 @@ export class Character extends Actor
         return this.toBJVector3(v3);
     }
 
+    public set pos(v:Vector3){
+        this.character.getGhostObject().getWorldTransform().setOrigin(this.toBLVector3(v));
+    }
+
     public constructor(protected scene:Scene, private canvas:HTMLCanvasElement|null, position:Vector3){
         super()
 
