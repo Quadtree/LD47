@@ -1,6 +1,5 @@
 import {Actor} from "../am/Actor";
 import {AbstractMesh, Color3, MeshBuilder, PBRMetallicRoughnessMaterial, Scene, Vector3} from "@babylonjs/core";
-import {ActorManager} from "../am/ActorManager";
 import {PlayerCharacter} from "./PlayerCharacter";
 
 export enum CardConsoleColor {

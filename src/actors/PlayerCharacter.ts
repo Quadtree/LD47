@@ -3,7 +3,6 @@ import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
 import {Vector3} from "@babylonjs/core";
-import {Damagable} from "./Damagable";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -20,7 +19,7 @@ export class PlayerCharacter extends Character {
         this.shootCharge += delta;
 
         if (this.wantsToShoot && this.shootCharge >= 0.3){
-            console.log(`SHOOT ${this.camera.globalPosition}`);
+            //console.log(`SHOOT ${this.camera.globalPosition}`);
             this.shootCharge = 0;
 
             this.actorManager!.add(new PlayerProjectile(
@@ -51,6 +50,7 @@ export class PlayerCharacter extends Character {
 
     takeDamage(amount: number): number {
         this.hp -= amount;
+        console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
         return amount;
     }
 

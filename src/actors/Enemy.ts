@@ -2,9 +2,7 @@ import {Character} from "./Character";
 import {AbstractMesh, MeshBuilder, Scene, Vector3} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
-import {PlayerProjectile} from "./PlayerProjectile";
 import {EnemyProjectile} from "./EnemyProjectile";
-import {Damagable} from "./Damagable";
 
 export class Enemy extends Character {
     public removed:boolean = false;
@@ -71,6 +69,7 @@ export class Enemy extends Character {
 
     takeDamage(amount: number): number {
         this.hp -= amount;
+        console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
         return amount;
     }
 }

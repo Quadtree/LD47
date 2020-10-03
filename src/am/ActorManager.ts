@@ -69,7 +69,7 @@ export class ActorManager
             throw new Error('Cannot add an actor with the same netID');
         }
 
-        console.log(`adding actor with id ${actor.netID}`);
+        //console.log(`adding actor with id ${actor.netID}`);
 
         this.actorAddQueue.push(actor);
     }
@@ -85,7 +85,7 @@ export class ActorManager
         const poss2 = this.actorAddQueue.filter(it => it.netID == id)
         if (poss2.length > 0) return poss2[0]
 
-        console.log(`actor with ID ${id} does NOT exist`);
+        //console.log(`actor with ID ${id} does NOT exist`);
 
         return null
     }

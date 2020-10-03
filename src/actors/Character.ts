@@ -1,16 +1,14 @@
-import { AdvancedDynamicTexture } from "@babylonjs/gui/2D/advancedDynamicTexture";
-import { AmmoJSPlugin } from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
-import { EventState } from "@babylonjs/core/Misc/observable";
-import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
-import { KeyboardEventTypes } from "@babylonjs/core/Events/keyboardEvents";
-import { KeyboardInfo } from "@babylonjs/core/Events/keyboardEvents";
-import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
-import { PointerInfo } from "@babylonjs/core/Events/pointerEvents";
-import { Scene } from "@babylonjs/core/scene";
-import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { Actor } from "../am/Actor";
-import { Keys } from "../Keys";
+import {AdvancedDynamicTexture} from "@babylonjs/gui/2D/advancedDynamicTexture";
+import {AmmoJSPlugin} from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
+import {EventState} from "@babylonjs/core/Misc/observable";
+import {FreeCamera} from "@babylonjs/core/Cameras/freeCamera";
+import {KeyboardEventTypes, KeyboardInfo} from "@babylonjs/core/Events/keyboardEvents";
+import {PointerEventTypes, PointerInfo} from "@babylonjs/core/Events/pointerEvents";
+import {Scene} from "@babylonjs/core/scene";
+import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
+import {Vector3} from "@babylonjs/core/Maths/math.vector";
+import {Actor} from "../am/Actor";
+import {Keys} from "../Keys";
 import {CardConsoleColor} from "./CardConsole";
 
 declare var Ammo:any;

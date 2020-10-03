@@ -6,7 +6,7 @@ export class Actor
     protected actorManager:ActorManager|null = null;
 
     public netOwnerID = 1
-    public netID = Math.floor(Math.random() * 1000000)
+    public netID = Math.floor(Math.random() * 100000000000)
 
     constructor(){
     }

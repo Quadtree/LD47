@@ -1,9 +1,7 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, EventState, PhysicsImpostor, Scene, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Scene, Vector3} from "@babylonjs/core";
 import {Util} from "../Util";
-import {Damagable} from "./Damagable";
-import {PlayerCharacter} from "./PlayerCharacter";
-import {Enemy} from "./Enemy";
+import {Character} from "./Character";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
@@ -48,8 +46,10 @@ export abstract class Projectile extends Actor {
             console.log("HIT SOMETHING");
 
             for (const actor of this.actorManager!.actors){
-                if ((actor instanceof Enemy || actor instanceof PlayerCharacter) && this.canHit(actor)){
-                    actor.takeDamage(this.damage);
+                if (actor instanceof Character && actor.pos.subtract(this.mesh!.position).length() < 3) {
+                    if ((actor as any).takeDamage && this.canHit(actor)) {
+                        (actor as any).takeDamage(this.damage);
+                    }
                 }
             }
         }
