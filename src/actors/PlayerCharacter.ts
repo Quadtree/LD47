@@ -3,10 +3,12 @@ import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
 import {Vector3} from "@babylonjs/core";
+import {Damagable} from "./Damagable";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
     private shootCharge:number = 0;
+    private hp:number = 1;
 
     public constructor(scene:Scene, canvas:HTMLCanvasElement|null){
         super(scene, canvas, new Vector3(0,2,-1.2));
@@ -23,8 +25,9 @@ export class PlayerCharacter extends Character {
 
             this.actorManager!.add(new PlayerProjectile(
                 this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
-                this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40))
-            );
+                this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40),
+                0.3
+            ));
 
             Util.rayTest(this.scene,
                 this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
@@ -45,4 +48,11 @@ export class PlayerCharacter extends Character {
         this.wantsToShoot = false;
         console.log(`this.wantsToShoot=${this.wantsToShoot}`)
     }
+
+    takeDamage(amount: number): number {
+        this.hp -= amount;
+        return amount;
+    }
+
+
 }

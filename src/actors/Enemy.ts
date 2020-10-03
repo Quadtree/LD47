@@ -4,9 +4,12 @@ import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {EnemyProjectile} from "./EnemyProjectile";
+import {Damagable} from "./Damagable";
 
 export class Enemy extends Character {
     public removed:boolean = false;
+
+    public hp:number = 0.5;
 
     private mesh:AbstractMesh;
 
@@ -48,7 +51,8 @@ export class Enemy extends Character {
                 if (this.attackCharge >= 1){
                     this.actorManager!.add(new EnemyProjectile(
                         this.pos,
-                        pc.pos.subtract(this.pos).normalize().scale(10)
+                        pc.pos.subtract(this.pos).normalize().scale(10),
+                        0.1
                     ));
                     this.attackCharge = 0;
                 }
@@ -62,6 +66,11 @@ export class Enemy extends Character {
     }
 
     keep(): boolean {
-        return super.keep() && !this.removed;
+        return super.keep() && !this.removed && this.hp > 0;
+    }
+
+    takeDamage(amount: number): number {
+        this.hp -= amount;
+        return amount;
     }
 }

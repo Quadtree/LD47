@@ -1,6 +1,9 @@
 import {Actor} from "../am/Actor";
 import {AbstractMesh, EventState, PhysicsImpostor, Scene, Vector3} from "@babylonjs/core";
 import {Util} from "../Util";
+import {Damagable} from "./Damagable";
+import {PlayerCharacter} from "./PlayerCharacter";
+import {Enemy} from "./Enemy";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
@@ -9,7 +12,7 @@ export abstract class Projectile extends Actor {
 
     private scene:Scene|null = null;
 
-    public constructor(public pos:Vector3, public vel:Vector3){
+    public constructor(public pos:Vector3, public vel:Vector3, public readonly damage:number){
         super();
     }
 
@@ -43,6 +46,12 @@ export abstract class Projectile extends Actor {
         if (Util.rayTest(this.scene!, this.mesh!.position, this.mesh!.position.add(this.vel.scale(delta * 3)))){
             this.life = -1;
             console.log("HIT SOMETHING");
+
+            for (const actor of this.actorManager!.actors){
+                if ((actor instanceof Enemy || actor instanceof PlayerCharacter) && this.canHit(actor)){
+                    actor.takeDamage(this.damage);
+                }
+            }
         }
     }
 
