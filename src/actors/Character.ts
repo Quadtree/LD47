@@ -64,7 +64,7 @@ export class Character extends Actor
         return this.toBJVector3(v3);
     }
 
-    public constructor(protected scene:Scene, private canvas:HTMLCanvasElement|null){
+    public constructor(protected scene:Scene, private canvas:HTMLCanvasElement|null, position:Vector3){
         super()
 
         this.camera = new FreeCamera('', new Vector3(), this.scene);
@@ -83,7 +83,8 @@ export class Character extends Actor
         let startTransform = new Ammo.btTransform();
         startTransform.setIdentity();
         //startTransform.setOrigin (btVector3(0.0, 4.0, 0.0));
-        startTransform.setOrigin(new Ammo.btVector3(0,2,-1.2));
+        // new Ammo.btVector3(0,2,-1.2)
+        startTransform.setOrigin(this.toBLVector3(position));
 
         let m_ghostObject = new Ammo.btPairCachingGhostObject();
         m_ghostObject.setWorldTransform(startTransform);

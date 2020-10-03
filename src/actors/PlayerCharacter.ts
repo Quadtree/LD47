@@ -2,13 +2,14 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
+import {Vector3} from "@babylonjs/core";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
     private shootCharge:number = 0;
 
     public constructor(scene:Scene, canvas:HTMLCanvasElement|null){
-        super(scene, canvas);
+        super(scene, canvas, new Vector3(0,2,-1.2));
     }
 
     update(delta: number) {

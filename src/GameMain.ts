@@ -20,6 +20,7 @@ import {Color3} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
+import {EnemySpawnPoint} from "./actors/EnemySpawnPoint";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -103,27 +104,9 @@ export class GameMain {
             }
         }
 
-        const grassTexture = new Texture("assets/grass1.png", this._scene);
-        grassTexture.uScale = 512
-        grassTexture.vScale = 512
-
-        const grassNormalTexture = new Texture("assets/grass1_normal.png", this._scene);
-        grassNormalTexture.uScale = 512
-        grassNormalTexture.vScale = 512
-
-        const groundMat1 = new PBRMetallicRoughnessMaterial("pbr1", this._scene);
-        groundMat1.metallic = 0.25;
-        groundMat1.roughness = 0.8;
-        groundMat1.baseColor = new Color3(1, 0, 0);
-
-        const tmp = ground2.parent;
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
 
-        ground2.physicsImpostor.executeNativeFunction((world:any, physicsBody:any) => {
-            console.log(world);
-            console.log(physicsBody);
-        });
-
+        EnemySpawnPoint.respawnAll(this.actorManager);
     }
 
     createHeightmapTerrain():Promise<string> {
