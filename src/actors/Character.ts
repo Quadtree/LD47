@@ -47,11 +47,11 @@ export class Character extends Actor
 
     protected camera:FreeCamera;
 
-    private moveForward = false;
-    private moveBackward = false;
-    private moveLeft = false;
-    private moveRight = false;
-    private jump = false;
+    protected moveForward = false;
+    protected moveBackward = false;
+    protected moveLeft = false;
+    protected moveRight = false;
+    protected jump = false;
 
     private isAdded = true;
     private addCharge = 1;
@@ -195,7 +195,8 @@ export class Character extends Actor
             this.isAdded = true;
         }
 
-        debugUiText.text = `pos=${this.formatVector(v3)}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
+        if (this.canvas)
+            debugUiText.text = `angle=${this.camera.rotation.y}\npos=${this.formatVector(v3)}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
     }
 
     private formatVector(v3:btVector3, fixedPlaces:number = 1){
