@@ -155,7 +155,7 @@ export class Character extends Actor
     }
 
     public update(delta:number){
-        let v3 = this.character.getGhostObject().getWorldTransform().getOrigin();
+        let v3:btVector3 = this.character.getGhostObject().getWorldTransform().getOrigin();
 
         this.camera.position = this.toBJVector3(v3).add(new Vector3(0, 0.75, 0));
 
@@ -201,7 +201,7 @@ export class Character extends Actor
         }
 
         if (this.canvas)
-            debugUiText.text = `angle=${this.camera.rotation.y}\npos=${this.formatVector(v3)}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
+            debugUiText.text = `angle=${this.camera.rotation.y}\npos=${this.formatBJVector(this.toBJVector3(v3))}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
     }
 
 
@@ -219,6 +219,10 @@ export class Character extends Actor
 
     private formatVector(v3:btVector3, fixedPlaces:number = 1){
         return `${v3.x().toFixed(fixedPlaces)},${v3.y().toFixed(fixedPlaces)},${v3.z().toFixed(fixedPlaces)}`;
+    }
+
+    private formatBJVector(v3:Vector3, fixedPlaces:number = 1){
+        return `${v3.x.toFixed(fixedPlaces)},${v3.y.toFixed(fixedPlaces)},${v3.z.toFixed(fixedPlaces)}`;
     }
 
     private toBLVector3(v3:Vector3):btVector3

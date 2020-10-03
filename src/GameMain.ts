@@ -83,6 +83,8 @@ export class GameMain {
         let found = 0;
 
         for (const child of ground2.getChildMeshes()){
+            const markerLocation = child.position.multiplyByFloats(-1, -1, 1);
+
             let marker = false;
             if (child.name == "RedCardConsole"){
                 console.log("Found RedCardConsole")
@@ -105,7 +107,7 @@ export class GameMain {
             }
             if (child.name.includes("EnemySpawn")){
                 console.log("Found EnemySpawn")
-                this.actorManager.add(new EnemySpawnPoint(child.position));
+                this.actorManager.add(new EnemySpawnPoint(markerLocation));
                 marker = true;
             }
 
@@ -113,8 +115,6 @@ export class GameMain {
                 child.dispose();
             } else {
                 console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
-
-                child.position
             }
         }
 

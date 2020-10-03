@@ -8,6 +8,7 @@ export class EnemySpawnPoint extends Actor {
 
     public constructor(private pos:Vector3){
         super();
+        console.log(`Enemy spawn point created at ${pos}`)
     }
 
 
@@ -28,7 +29,7 @@ export class EnemySpawnPoint extends Actor {
     static respawnAll(am:ActorManager){
         for (const a of am.actors){
             if (a instanceof EnemySpawnPoint){
-                am.add(new Enemy(a.scene!, a.pos))
+                am.add(new Enemy(a.scene!, a.pos.add(new Vector3(0, 1.5, 0))))
             }
         }
     }
