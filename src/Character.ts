@@ -68,7 +68,7 @@ export class Character extends Actor
         let startTransform = new Ammo.btTransform();
         startTransform.setIdentity();
         //startTransform.setOrigin (btVector3(0.0, 4.0, 0.0));
-        startTransform.setOrigin(new Ammo.btVector3(-8,10,24));
+        startTransform.setOrigin(new Ammo.btVector3(0,2,-1.2));
 
         let m_ghostObject = new Ammo.btPairCachingGhostObject();
         m_ghostObject.setWorldTransform(startTransform);
