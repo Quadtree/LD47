@@ -79,12 +79,16 @@ export class Util
         //console.log(Ammo);
 
         const cb = new Ammo.ClosestRayResultCallback();
+        const fromBTV = Util.toBLVector3(from);
+        const toBTV = Util.toBLVector3(to);
 
-        world.rayTest(Util.toBLVector3(from), Util.toBLVector3(to), cb);
+        world.rayTest(fromBTV, toBTV, cb);
 
         const ret = cb.m_collisionObject.ptr != 0;
 
         Ammo.destroy(cb);
+        Ammo.destroy(fromBTV);
+        Ammo.destroy(toBTV);
 
         //console.log(cb.m_collisionObject);
 
