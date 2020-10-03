@@ -1,5 +1,5 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, PhysicsImpostor, Scene, Vector3} from "@babylonjs/core";
+import {AbstractMesh, EventState, PhysicsImpostor, Scene, Vector3} from "@babylonjs/core";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
@@ -21,6 +21,9 @@ export abstract class Projectile extends Actor {
 
         this.mesh.physicsImpostor = new PhysicsImpostor(this.mesh, PhysicsImpostor.SphereImpostor, {mass: 1, velocityIterations: 10, positionIterations: 10, margin: 0.2}, scene);
         this.mesh.physicsImpostor.setLinearVelocity(this.vel);
+        this.mesh.onCollideObservable.add((ed:AbstractMesh, es:EventState) => {
+            console.log(ed);
+        });
     }
 
     exitingView() {
