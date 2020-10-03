@@ -52,8 +52,8 @@ export class Enemy extends Character {
                 if (this.attackCharge >= 1){
                     this.actorManager!.add(new EnemyProjectile(
                         this.pos,
-                        pc.pos.subtract(this.pos).normalize().scale(10),
-                        0.1
+                        pc.pos.subtract(this.pos).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
+                        this.actorManager!.currentDifficultySettings.enemyDamage
                     ));
                     this.attackCharge = 0;
                 }

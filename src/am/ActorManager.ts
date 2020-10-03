@@ -96,6 +96,7 @@ export class ActorManager
 
     public currentDifficultySettings = {
         enemyDamage: 0.1,
+        enemyProjectileSpeed: 10,
         playerDamage: 0.3,
         energyCostPerShot: 0.06,
     }
