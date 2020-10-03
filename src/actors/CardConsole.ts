@@ -31,7 +31,7 @@ export class CardConsole extends Actor {
 
         this.mesh.material = material;
 
-        this.mesh.position.copyFrom(this.pos.scale(-1));
+        this.mesh.position.copyFrom(this.pos);
 
         console.log(`Creating mesh and stuff at ${this.pos}`);
 

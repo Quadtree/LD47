@@ -21,6 +21,7 @@ import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
 import {EnemySpawnPoint} from "./actors/EnemySpawnPoint";
+import {GLTFFileLoader} from "@babylonjs/loaders";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -104,7 +105,7 @@ export class GameMain {
             }
             if (child.name.includes("EnemySpawn")){
                 console.log("Found EnemySpawn")
-                this.actorManager.add(new EnemySpawnPoint(child.position.scale(-1)));
+                this.actorManager.add(new EnemySpawnPoint(child.position));
                 marker = true;
             }
 
@@ -112,8 +113,8 @@ export class GameMain {
                 child.dispose();
             } else {
                 console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
-                found++;
-                if (found >= 2) child.isVisible = false;
+
+                child.position
             }
         }
 

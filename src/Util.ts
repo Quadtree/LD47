@@ -56,7 +56,7 @@ export class Util
         const ret = new Ammo.btVector3();
         ret.setX(v3.x);
         ret.setY(v3.y);
-        ret.setZ(v3.z);
+        ret.setZ(-v3.z);
         return ret;
     }
 
@@ -65,7 +65,7 @@ export class Util
         return new Vector3(
             v3.x(),
             v3.y(),
-            v3.z()
+            -v3.z()
         );
     }
 
