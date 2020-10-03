@@ -27,7 +27,7 @@ export abstract class Projectile extends Actor {
 
         if (this.mesh.material instanceof StandardMaterial){
             this.light = new PointLight("", this.pos, scene);
-            this.light.intensity = 5;
+            this.light.intensity = 2;
             this.light.diffuse = this.mesh.material.emissiveColor;
             this.light.specular = this.mesh.material.emissiveColor;
         }
