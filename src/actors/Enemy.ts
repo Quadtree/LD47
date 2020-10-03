@@ -32,9 +32,12 @@ export class Enemy extends Character {
         if (pcList.length){
             const pc = pcList[0] as PlayerCharacter;
 
-            if (!Util.rayTest(this.scene, this.pos, pc.pos)){
-                const deltaPos = pc.pos.subtract(this.mesh.position);
+            const deltaPos = pc.pos.subtract(this.pos);
 
+            const towardsPCNormalized = deltaPos.normalize();
+            const towardsEnemyNormalized = deltaPos.scale(-1).normalize();
+
+            if (!Util.rayTest(this.scene, this.pos.add(towardsPCNormalized.scale(2)), pc.pos.add(towardsEnemyNormalized.scale(2)))){
                 if (deltaPos.length() > 12){
                     this.moveForward = true;
                 } else {
