@@ -22,6 +22,7 @@ import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
 import {EnemySpawnPoint} from "./actors/EnemySpawnPoint";
 import {GLTFFileLoader} from "@babylonjs/loaders";
+import {PowerUp, PowerUpType} from "./actors/PowerUp";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -108,6 +109,14 @@ export class GameMain {
             if (child.name.includes("EnemySpawn")){
                 console.log("Found EnemySpawn")
                 this.actorManager.add(new EnemySpawnPoint(markerLocation));
+                marker = true;
+            }
+            if (child.name.includes("AttackPowerUp")){
+                this.actorManager.add(new PowerUp(markerLocation, this._scene, PowerUpType.Attack));
+                marker = true;
+            }
+            if (child.name.includes("EnemySpawn")){
+                this.actorManager.add(new PowerUp(markerLocation, this._scene, PowerUpType.Charge));
                 marker = true;
             }
 

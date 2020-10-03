@@ -4,6 +4,7 @@ import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
 import {Vector3} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
+import {PowerUpType} from "./PowerUp";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -11,6 +12,8 @@ export class PlayerCharacter extends Character {
     private hp:number = 1;
     private respawnTimer:number|null = null;
     private battery:number = 1;
+
+    public powerUps:PowerUpType[] = [];
 
     private static START_POS = new Vector3(0,2,-1.2);
 
@@ -30,6 +33,7 @@ export class PlayerCharacter extends Character {
             if (this.respawnTimer <= 0){
                 this.pos = PlayerCharacter.START_POS
                 this.hp = 1;
+                this.battery = 1 + (this.powerUps.includes(PowerUpType.Charge) ? 1 : 0);
 
                 this.respawnTimer = null;
             }
@@ -46,7 +50,8 @@ export class PlayerCharacter extends Character {
             this.actorManager!.add(new PlayerProjectile(
                 this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
                 this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40),
-                0.3
+                this.actorManager!.currentDifficultySettings.playerDamage,
+                this.powerUps.includes(PowerUpType.Attack)
             ));
 
             Util.rayTest(this.scene,
