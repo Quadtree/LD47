@@ -79,6 +79,8 @@ export class GameMain {
 
         const physicsViewer = new PhysicsViewer(this._scene);
 
+        let found = 0;
+
         for (const child of ground2.getChildMeshes()){
             let marker = false;
             if (child.name == "RedCardConsole"){
@@ -110,6 +112,8 @@ export class GameMain {
                 child.dispose();
             } else {
                 console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
+                found++;
+                if (found >= 2) child.isVisible = false;
             }
         }
 
