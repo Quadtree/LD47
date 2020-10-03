@@ -46,9 +46,13 @@ export class GameMain {
 
         // Create a basic light, aiming 0,1,0 - meaning, to the sky.
         const skyLight = new HemisphericLight('light1', new Vector3(0,1,0), this._scene);
-        skyLight.intensity = 0.1
+        skyLight.intensity = 0.4
 
-        const directionalLight = new DirectionalLight("light2", new Vector3(1,-0.25,1), this._scene)
+        const skyLight2 = new HemisphericLight('light1', new Vector3(0,-1,0), this._scene);
+        skyLight2.intensity = 0.1
+
+        const directionalLight = new DirectionalLight("light2", new Vector3(-0.4,-1,-0.5), this._scene)
+        directionalLight.intensity = 0.5
         directionalLight.shadowEnabled = true
         directionalLight.autoCalcShadowZBounds = true
 
@@ -97,7 +101,7 @@ export class GameMain {
         //ground2.rotation.y = Math.PI;
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
 
-        ground2.getChildMeshes().forEach(it => it.material = groundMat1);
+        //ground2.getChildMeshes().forEach(it => it.material = groundMat1);
 
         //console.log((ground2.physicsImpostor as any)._parent);
         //console.log(ground2.physicsImpostor.isBodyInitRequired());

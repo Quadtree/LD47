@@ -59,6 +59,10 @@ export class Character extends Actor
         super()
 
         this.camera = new FreeCamera('', new Vector3(), this.scene);
+        //this.camera.fov = 75;
+        this.camera.minZ = 0.1;
+        this.camera.maxZ = 100;
+        console.log(`fov=${this.camera.fov}`);
         if (this.canvas){
             this.camera.attachControl(this.canvas, false);
         }
@@ -74,7 +78,7 @@ export class Character extends Actor
         m_ghostObject.setWorldTransform(startTransform);
         ajsp.world.getBroadphase().getOverlappingPairCache().setInternalGhostPairCallback(new Ammo.btGhostPairCallback());
         const characterHeight=1.75;
-        const characterWidth =1.75;
+        const characterWidth =1.00;
         let capsule = new Ammo.btCapsuleShape(characterWidth,characterHeight);
         m_ghostObject.setCollisionShape(capsule);
         m_ghostObject.setCollisionFlags(CF_CHARACTER_OBJECT);
@@ -120,7 +124,7 @@ export class Character extends Actor
     public update(delta:number){
         let v3 = this.character.getGhostObject().getWorldTransform().getOrigin();
 
-        this.camera.position = this.toBJVector3(v3);
+        this.camera.position = this.toBJVector3(v3).add(new Vector3(0, 0.75, 0));
 
         const walkSpeed = 0.25;
 
