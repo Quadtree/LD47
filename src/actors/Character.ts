@@ -45,7 +45,7 @@ export class Character extends Actor
 {
     private character:any;
 
-    private camera:FreeCamera;
+    protected camera:FreeCamera;
 
     private moveForward = false;
     private moveBackward = false;
