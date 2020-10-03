@@ -82,10 +82,14 @@ export class Util
 
         world.rayTest(Util.toBLVector3(from), Util.toBLVector3(to), cb);
 
+        const ret = cb.m_collisionObject.ptr != 0;
+
+        Ammo.destroy(cb);
+
         //console.log(cb.m_collisionObject);
 
         //console.log("RAY TEST DONE");
 
-        return cb.m_collisionObject.ptr != 0;
+        return ret;
     }
 }
