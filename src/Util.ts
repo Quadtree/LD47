@@ -51,8 +51,14 @@ export class Util
         return `${v3.x().toFixed(fixedPlaces)},${v3.y().toFixed(fixedPlaces)},${v3.z().toFixed(fixedPlaces)}`;
     }
 
-    private static toBLVector3(v3:Vector3):btVector3
+    public static toBLVector3(v3:Vector3):btVector3
     {
+        Util.totalVectors++;
+
+        if (Util.totalVectors > 100){
+            console.log(`POSSIBLE MEMORY LEAK ${Util.totalVectors}`);
+        }
+
         const ret = new Ammo.btVector3();
         ret.setX(v3.x);
         ret.setY(v3.y);
@@ -60,13 +66,20 @@ export class Util
         return ret;
     }
 
-    private static toBJVector3(v3:btVector3):Vector3
+    private static totalVectors = 0;
+
+    public static toBJVector3(v3:btVector3):Vector3
     {
         return new Vector3(
             v3.x(),
             v3.y(),
             -v3.z()
         );
+    }
+
+    public static destroyVector(v3:btVector3){
+        Util.totalVectors--;
+        Ammo.destroy(v3);
     }
 
     static rayTest(scene:Scene, from:Vector3, to:Vector3):boolean {
@@ -87,8 +100,8 @@ export class Util
         const ret = cb.m_collisionObject.ptr != 0;
 
         Ammo.destroy(cb);
-        Ammo.destroy(fromBTV);
-        Ammo.destroy(toBTV);
+        this.destroyVector(fromBTV);
+        this.destroyVector(toBTV);
 
         //console.log(cb.m_collisionObject);
 

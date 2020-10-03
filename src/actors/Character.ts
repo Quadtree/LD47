@@ -10,6 +10,7 @@ import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import {Actor} from "../am/Actor";
 import {Keys} from "../Keys";
 import {CardConsoleColor} from "./CardConsole";
+import {Util} from "../Util";
 
 declare var Ammo:any;
 
@@ -202,6 +203,8 @@ export class Character extends Actor
 
         if (this.canvas)
             debugUiText.text = `angle=${this.camera.rotation.y}\npos=${this.formatBJVector(this.toBJVector3(v3))}\nwalkDirection=${this.formatVector(blWalkDirection, 4)}\nonGround=${this.character.onGround()}\nisAdded=${this.isAdded} addCharge=${this.addCharge.toFixed(1)} shouldBeAdded=${shouldBeAdded}`
+
+        Util.destroyVector(blWalkDirection);
     }
 
 
@@ -227,11 +230,7 @@ export class Character extends Actor
 
     private toBLVector3(v3:Vector3):btVector3
     {
-        const ret = new Ammo.btVector3();
-        ret.setX(v3.x);
-        ret.setY(v3.y);
-        ret.setZ(-v3.z);
-        return ret;
+        return Util.toBLVector3(v3);
     }
 
     private toBJVector3(v3:btVector3):Vector3
