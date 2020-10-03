@@ -125,11 +125,19 @@ export class Character extends Actor
             debugUiText.color = '#ffffff'
 
             this.scene.onPointerObservable.add((ed:PointerInfo, es:EventState) => {
-                if (ed.type == PointerEventTypes.POINTERTAP){
+                if (ed.type == PointerEventTypes.POINTERTAP && ed.event instanceof PointerEvent){
                     this.canvas!.requestPointerLock();
+                    if (!this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)){
+                        //console.log(`hasPointerCapture=${this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)}`);
+                        this.pointerDown();
+                    }
                 }
             });
         }
+    }
+
+    protected pointerDown(){
+
     }
 
     public update(delta:number){
