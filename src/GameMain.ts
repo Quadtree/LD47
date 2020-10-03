@@ -84,38 +84,32 @@ export class GameMain {
         let found = 0;
 
         for (const child of ground2.getChildMeshes()){
-            const markerLocation = child.position.multiplyByFloats(-1, -1, 1);
+            const markerLocation = child.position.multiplyByFloats(-1, 1, 1);
 
             let marker = false;
             if (child.name == "RedCardConsole"){
                 console.log("Found RedCardConsole")
                 this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Red));
                 marker = true;
-            }
-            if (child.name == "GreenCardConsole"){
+            } else if (child.name == "GreenCardConsole"){
                 console.log("Found GreenCardConsole")
                 this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Green));
                 marker = true;
-            }
-            if (child.name == "BlueCardConsole"){
+            } else if (child.name == "BlueCardConsole"){
                 console.log("Found BlueCardConsole")
                 this.actorManager.add(new CardConsole(markerLocation, this._scene, CardConsoleColor.Blue));
                 marker = true;
-            }
-            if (child.name == "ExitDoor"){
+            } else if (child.name == "ExitDoor"){
                 this.actorManager.add(new ExitDoor(markerLocation));
                 marker = true;
-            }
-            if (child.name.includes("EnemySpawn")){
+            } else if (child.name.includes("EnemySpawn")){
                 console.log("Found EnemySpawn")
                 this.actorManager.add(new EnemySpawnPoint(markerLocation));
                 marker = true;
-            }
-            if (child.name.includes("AttackPowerUp")){
+            } else if (child.name.includes("AttackPowerUp")){
                 this.actorManager.add(new PowerUp(markerLocation, this._scene, PowerUpType.Attack));
                 marker = true;
-            }
-            if (child.name.includes("EnemySpawn")){
+            } else if (child.name.includes("ChargePowerUp")){
                 this.actorManager.add(new PowerUp(markerLocation, this._scene, PowerUpType.Charge));
                 marker = true;
             }
