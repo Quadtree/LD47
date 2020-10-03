@@ -10,6 +10,7 @@ export class PlayerCharacter extends Character {
     private shootCharge:number = 0;
     private hp:number = 1;
     private respawnTimer:number|null = null;
+    private battery:number = 1;
 
     private static START_POS = new Vector3(0,2,-1.2);
 
@@ -85,4 +86,7 @@ export class PlayerCharacter extends Character {
     }
 
 
+    protected getExtraText(): string {
+        return `cards=${this.cards}\nhp=${this.hp.toFixed(2)}\nbattery=${this.battery.toFixed(2)}`
+    }
 }
