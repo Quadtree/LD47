@@ -1,11 +1,16 @@
 import {Character} from "./Character";
 import {AbstractMesh, MeshBuilder, Scene, Vector3} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
+import {Util} from "../Util";
+import {PlayerProjectile} from "./PlayerProjectile";
+import {EnemyProjectile} from "./EnemyProjectile";
 
 export class Enemy extends Character {
     public removed:boolean = false;
 
     private mesh:AbstractMesh;
+
+    private attackCharge:number = 0;
 
     public constructor(scene:Scene, startPosition:Vector3) {
         super(scene, null, startPosition);
@@ -20,20 +25,37 @@ export class Enemy extends Character {
     update(delta: number) {
         super.update(delta);
 
+        let canSeePC = false;
+
         const pcList = this.actorManager!.actors.filter(it => it instanceof PlayerCharacter);
         if (pcList.length){
             const pc = pcList[0] as PlayerCharacter;
 
-            const delta = pc.pos.subtract(this.mesh.position);
+            if (Util.rayTest(this.scene, this.pos, pc.pos)){
+                const deltaPos = pc.pos.subtract(this.mesh.position);
 
-            if (delta.length() > 12){
-                this.moveForward = true;
-            } else {
-                this.moveForward = false;
+                if (deltaPos.length() > 12){
+                    this.moveForward = true;
+                } else {
+                    this.moveForward = false;
+                }
+
+                this.camera.rotation.y = Math.atan2(deltaPos.x, deltaPos.z);
+
+                canSeePC = true;
+                this.attackCharge += delta;
+
+                if (this.attackCharge >= 1){
+                    this.actorManager!.add(new EnemyProjectile(
+                        this.pos,
+                        pc.pos.subtract(this.pos).normalize().scale(10)
+                    ));
+                    this.attackCharge = 0;
+                }
             }
-
-            this.camera.rotation.y = Math.atan2(delta.x, delta.z);
         }
+
+        if (!canSeePC) this.attackCharge = 0;
 
         this.mesh.position.copyFrom(this.pos);
         this.mesh.rotation.copyFrom(this.camera.rotation);
