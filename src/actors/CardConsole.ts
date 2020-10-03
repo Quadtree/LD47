@@ -1,5 +1,7 @@
 import {Actor} from "../am/Actor";
 import {AbstractMesh, Color3, MeshBuilder, PBRMetallicRoughnessMaterial, Scene, Vector3} from "@babylonjs/core";
+import {ActorManager} from "../am/ActorManager";
+import {PlayerCharacter} from "./PlayerCharacter";
 
 export enum CardConsoleColor {
     Red,
@@ -15,6 +17,8 @@ const COLORS = [
 
 export class CardConsole extends Actor {
     private mesh:AbstractMesh;
+
+    private collected:boolean = false;
 
     public constructor(private pos:Vector3, private scene:Scene, private cardConsoleColor:CardConsoleColor){
         super();
@@ -33,5 +37,31 @@ export class CardConsole extends Actor {
         console.log(`Creating mesh and stuff at ${this.pos}`);
 
         //this.scene.addMesh(this.mesh);
+    }
+
+    update(delta: number) {
+        super.update(delta);
+
+        const pcList = this.actorManager!.actors.filter(it => it instanceof PlayerCharacter);
+        if (pcList.length){
+            const pc = pcList[0] as PlayerCharacter;
+
+            if (pc.pos.subtract(this.mesh.position).length() < 2){
+                console.log(`Collecting ${this.cardConsoleColor}`)
+                this.collected = true
+            }
+        }
+    }
+
+
+    keep(): boolean {
+        return !this.collected;
+    }
+
+
+    exitingWorld() {
+        super.exitingWorld();
+
+        this.mesh.dispose();
     }
 }

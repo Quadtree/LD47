@@ -55,6 +55,12 @@ export class Character extends Actor
     private isAdded = true;
     private addCharge = 1;
 
+    public get pos(){
+        let v3 = this.character.getGhostObject().getWorldTransform().getOrigin();
+
+        return this.toBJVector3(v3);
+    }
+
     public constructor(private scene:Scene, private canvas:HTMLCanvasElement|null){
         super()
 
