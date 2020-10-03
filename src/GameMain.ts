@@ -75,7 +75,9 @@ export class GameMain {
         const ground2 = (await SceneLoader.ImportMeshAsync(null, './assets/map1.glb', '', this._scene)).meshes[0];
         //ground2.position.y -= 50;
         //ground2.position.z += 20;
-        console.log(`loaded ground2=${ground2.name}`);
+        console.log(`loaded ground2=${ground2.name} ${ground2.position} ${ground2.rotation}`);
+
+        const physicsViewer = new PhysicsViewer(this._scene);
 
         for (const child of ground2.getChildMeshes()){
             let marker = false;
@@ -106,10 +108,13 @@ export class GameMain {
 
             if (marker){
                 child.dispose();
+            } else {
+                console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
             }
         }
 
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
+        physicsViewer.showImpostor(ground2.physicsImpostor);
         this.needsSpawn = true;
     }
 
