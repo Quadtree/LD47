@@ -1,28 +1,24 @@
-import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
-import { AmmoJSPlugin } from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
-import { CannonJSPlugin } from "@babylonjs/core/Physics/Plugins/cannonJSPlugin";
-import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
-import { Engine } from "@babylonjs/core/Engines/engine";
-import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
-import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
-import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
-import { PBRMetallicRoughnessMaterial } from "@babylonjs/core/Materials/PBR/pbrMetallicRoughnessMaterial";
-import { PhysicsEngineSceneComponent } from "@babylonjs/core/Physics/physicsEngineComponent";
-import { PhysicsImpostor } from "@babylonjs/core/Physics/physicsImpostor";
-import { PhysicsViewer } from "@babylonjs/core/Debug/physicsViewer";
-import { Scene } from "@babylonjs/core/scene";
-import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
-import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
-import { Texture } from "@babylonjs/core/Materials/Textures/texture";
-import { UniversalCamera } from "@babylonjs/core/Cameras/universalCamera";
-import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh";
+import {AmmoJSPlugin} from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
+import {DirectionalLight} from "@babylonjs/core/Lights/directionalLight";
+import {Engine} from "@babylonjs/core/Engines/engine";
+import {HemisphericLight} from "@babylonjs/core/Lights/hemisphericLight";
+import {MeshBuilder} from "@babylonjs/core/Meshes/meshBuilder";
+import {PBRMetallicRoughnessMaterial} from "@babylonjs/core/Materials/PBR/pbrMetallicRoughnessMaterial";
+import {PhysicsImpostor} from "@babylonjs/core/Physics/physicsImpostor";
+import {PhysicsViewer} from "@babylonjs/core/Debug/physicsViewer";
+import {Scene} from "@babylonjs/core/scene";
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
+import {ShadowGenerator} from "@babylonjs/core/Lights/Shadows/shadowGenerator";
+import {Texture} from "@babylonjs/core/Materials/Textures/texture";
+import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import { Keys } from './Keys';
-import { ActorManager } from './am/ActorManager';
-import { Character } from './actors/Character';
+import {ActorManager} from './am/ActorManager';
+import {Character} from './actors/Character';
 import {Color3} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
+import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -77,7 +73,28 @@ export class GameMain {
         const ground2 = (await SceneLoader.ImportMeshAsync(null, './assets/map1.glb', '', this._scene)).meshes[0];
         //ground2.position.y -= 50;
         //ground2.position.z += 20;
-        console.log(`loaded ground2=${ground2.name}`)
+        console.log(`loaded ground2=${ground2.name}`);
+
+        for (const child of ground2.getChildMeshes()){
+            let marker = false;
+            if (child.name == "RedCardConsole"){
+                console.log("Found RedCardConsole")
+                this.actorManager.add(new CardConsole(child.position, this._scene, CardConsoleColor.Red));
+                marker = true;
+            }
+            if (child.name == "GreenCardConsole"){
+                console.log("Found GreenCardConsole")
+                marker = true;
+            }
+            if (child.name == "BlueCardConsole"){
+                console.log("Found BlueCardConsole")
+                marker = true;
+            }
+
+            if (marker){
+                child.dispose();
+            }
+        }
 
         const grassTexture = new Texture("assets/grass1.png", this._scene);
         grassTexture.uScale = 512
@@ -91,22 +108,10 @@ export class GameMain {
         groundMat1.metallic = 0.25;
         groundMat1.roughness = 0.8;
         groundMat1.baseColor = new Color3(1, 0, 0);
-        //groundMat1.baseTexture = grassTexture;
-        //groundMat1.normalTexture = grassNormalTexture;
 
         const tmp = ground2.parent;
-        //ground2.freezeWorldMatrix();
-        //console.log(`BEFORE ${ground2.getAbsolutePosition()} ${ground2.absoluteRotationQuaternion}`);
-        //ground2.parent = null;
-        //console.log(`AFTER ${ground2.getAbsolutePosition()} ${ground2.absoluteRotationQuaternion}`);
-        //ground2.rotation.y = Math.PI;
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
 
-        //ground2.getChildMeshes().forEach(it => it.material = groundMat1);
-
-        //console.log((ground2.physicsImpostor as any)._parent);
-        //console.log(ground2.physicsImpostor.isBodyInitRequired());
-        //ground2.physicsImpostor.forceUpdate();
         ground2.physicsImpostor.executeNativeFunction((world:any, physicsBody:any) => {
             console.log(world);
             console.log(physicsBody);
