@@ -129,7 +129,7 @@ export class Enemy extends Character {
         console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
 
         if (this.hp <= 0){
-            this.actorManager!.add(new Explosion(this.pos.add(new Vector3(0, -1, 0)), 1, new Color3(1, 0.5, 0)));
+            this.actorManager!.add(new Explosion(this.pos.add(new Vector3(0, -1, 0)), 80, new Color3(1, 0.5, 0)));
         }
 
         return amount;
