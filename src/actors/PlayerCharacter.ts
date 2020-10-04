@@ -6,11 +6,12 @@ import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, StandardMaterial,
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
-import {AdvancedDynamicTexture, Image, Rectangle} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Button, Image, Rectangle, StackPanel} from "@babylonjs/gui";
 import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 import {StartDoor} from "./StartDoor";
-import {ActorManager} from "../am/ActorManager";
+import {ActorManager, DifficultySettings} from "../am/ActorManager";
 import {ExitDoor} from "./ExitDoor";
+import {canvasGlobal} from "../GameMain";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -154,11 +155,66 @@ export class PlayerCharacter extends Character {
         actorManager.ui!.addControl(this.titleScreen);
         this.titleScreen.isPointerBlocker = true;
 
+        const difficultyScreen = new StackPanel();
+
+        const dButtons = [
+            Button.CreateImageWithCenterTextButton("", "Easy", "assets/button.png"),
+            Button.CreateImageWithCenterTextButton("", "Medium", "assets/button.png"),
+            Button.CreateImageWithCenterTextButton("", "Hard", "assets/button.png"),
+        ];
+
+        const difficulties:DifficultySettings[] = [
+            {
+                enemyDamage: 0.15,
+                enemyProjectileSpeed: 20,
+                playerDamage: 0.3,
+                energyCostPerShot: 0.06,
+            },
+            {
+                enemyDamage: 0.3,
+                enemyProjectileSpeed: 30,
+                playerDamage: 0.2,
+                energyCostPerShot: 0.06,
+            },
+            {
+                enemyDamage: 0.45,
+                enemyProjectileSpeed: 30,
+                playerDamage: 0.2,
+                energyCostPerShot: 0.08,
+            },
+        ]
+
+        let i =0;
+
+        for (const dd of dButtons){
+            dd.heightInPixels = 80;
+            dd.widthInPixels = 200;
+            dd.paddingTopInPixels = 30;
+            difficultyScreen.addControl(dd);
+
+            const currentI = i;
+
+            dd.onPointerClickObservable.add((a, b) => {
+                actorManager.currentDifficultySettings = difficulties[currentI];
+
+                actorManager.ui!.removeControl(difficultyScreen)
+
+                canvasGlobal.requestPointerLock();
+                this.gameStarted = true;
+                this.fader!.alpha = 0;
+            });
+
+            ++i;
+        }
+
         this.titleScreen.onPointerClickObservable.add((a, b) => {
             this.titleScreen.isVisible = false;
-            this.gameStarted = true;
-            this.fader!.alpha = 0;
-        })
+            //this.gameStarted = true;
+            //this.fader!.alpha = 0;
+
+            actorManager.ui!.addControl(difficultyScreen)
+        });
+
     }
 
     update(delta: number) {

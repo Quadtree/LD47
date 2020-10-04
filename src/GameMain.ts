@@ -27,6 +27,8 @@ import {Enemy} from "./actors/Enemy";
 import {StartDoor} from "./actors/StartDoor";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
+export let canvasGlobal:HTMLCanvasElement;
+
 export class GameMain {
     private _canvas: HTMLCanvasElement;
     private _engine: Engine;
@@ -40,6 +42,7 @@ export class GameMain {
 
         // Create canvas and engine.
         this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
+        canvasGlobal = this._canvas;
         this._engine = new Engine(this._canvas, true);
 
         // Create a basic BJS Scene object.

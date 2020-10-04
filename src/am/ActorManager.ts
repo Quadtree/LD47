@@ -4,6 +4,20 @@ import { ActorManagerPlugin } from "./ActorManagerPlugin";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
+/*
+enemyDamage: 0.1,
+        enemyProjectileSpeed: 10,
+        playerDamage: 0.3,
+        energyCostPerShot: 0.06,
+ */
+
+export interface DifficultySettings {
+    enemyDamage:number,
+    enemyProjectileSpeed:number,
+    playerDamage:number,
+    energyCostPerShot:number,
+}
+
 export class ActorManager
 {
     private actorManagerPlugins:ActorManagerPlugin[] = []
@@ -95,7 +109,7 @@ export class ActorManager
         return this.actors.length + this.actorAddQueue.length;
     }
 
-    public currentDifficultySettings = {
+    public currentDifficultySettings:DifficultySettings = {
         enemyDamage: 0.1,
         enemyProjectileSpeed: 10,
         playerDamage: 0.3,
