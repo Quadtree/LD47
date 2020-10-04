@@ -1,5 +1,13 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, Color3, MeshBuilder, PBRMetallicRoughnessMaterial, Scene, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    Color3,
+    MeshBuilder, PBRMaterial,
+    PBRMetallicRoughnessMaterial,
+    Scene,
+    Texture,
+    Vector3
+} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 
 export enum CardConsoleColor {
@@ -22,14 +30,21 @@ export class CardConsole extends Actor {
     public constructor(private pos:Vector3, private scene:Scene, private cardConsoleColor:CardConsoleColor){
         super();
 
-        this.mesh = MeshBuilder.CreateIcoSphere("sp1", {radius: 0.5}, scene);
+        this.mesh = MeshBuilder.CreatePlane("sp1", {size: 1}, scene);
 
-        const material = new PBRMetallicRoughnessMaterial("matmat", scene);
-        material.baseColor = COLORS[this.cardConsoleColor];
-        material.roughness = 1;
-        material.metallic = 1;
+        const texture = new Texture(`assets/key${cardConsoleColor}.png`, scene);
+        texture.hasAlpha = true;
 
-        this.mesh.material = material;
+        const mat = new PBRMaterial("", scene);
+        mat.emissiveTexture = texture;
+        mat.emissiveColor = new Color3(1,1,1);
+        mat.emissiveIntensity = 1;
+        mat.albedoTexture = texture;
+        mat.useAlphaFromAlbedoTexture = true;
+        mat.transparencyMode = 2;
+        mat.backFaceCulling = false;
+
+        this.mesh.material = mat;
 
         this.mesh.position.copyFrom(this.pos);
 
@@ -40,6 +55,8 @@ export class CardConsole extends Actor {
 
     update(delta: number) {
         super.update(delta);
+
+        this.mesh.rotation.y += delta * 2;
 
         const pcList = this.actorManager!.actors.filter(it => it instanceof PlayerCharacter);
         if (pcList.length){
