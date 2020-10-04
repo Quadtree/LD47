@@ -75,7 +75,7 @@ export class Character extends Actor
         this.camera = new FreeCamera('', new Vector3(), this.scene);
         //this.camera.fov = 75;
         this.camera.minZ = 0.1;
-        this.camera.maxZ = 100;
+        this.camera.maxZ = 800;
         this.camera.inertia = 0;
         this.camera.angularSensibility = 400;
         console.log(`fov=${this.camera.fov}`);

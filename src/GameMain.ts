@@ -16,7 +16,7 @@ import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {ActorManager} from './am/ActorManager';
 import {Character} from './actors/Character';
-import {Color3, PBRMaterial} from "@babylonjs/core";
+import {Color3, PBRMaterial, StandardMaterial} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
@@ -132,6 +132,13 @@ export class GameMain {
 
         ground2.physicsImpostor = new PhysicsImpostor(ground2, PhysicsImpostor.MeshImpostor, {mass: 0}, this._scene);
         physicsViewer.showImpostor(ground2.physicsImpostor);
+
+        const backgroundSphere = MeshBuilder.CreateIcoSphere("", {radius: 400}, this._scene);
+        const backgroundSphereMat = new StandardMaterial("", this._scene);
+        backgroundSphereMat.emissiveTexture = new Texture("assets/starfield.png", this._scene);
+        backgroundSphereMat.backFaceCulling = false;
+        backgroundSphere.material = backgroundSphereMat;
+
         this.needsSpawn = true;
     }
 
