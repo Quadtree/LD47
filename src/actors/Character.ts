@@ -119,11 +119,17 @@ export class Character extends Actor
                     if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP) {
                         const evt = ed.event as KeyboardEvent;
                         const down = ed.type == KeyboardEventTypes.KEYDOWN;
+                        console.log(evt.key);
                         if (evt.keyCode == Keys.W) this.moveForward = down;
                         if (evt.keyCode == Keys.S) this.moveBackward = down;
                         if (evt.keyCode == Keys.A) this.moveLeft = down;
                         if (evt.keyCode == Keys.D) this.moveRight = down;
                         if (evt.keyCode == Keys.Space) this.jump = down;
+                        if (evt.key == 'u' && Util.CHEATS_ENABLED){
+                            this.cards.push(0);
+                            this.cards.push(1);
+                            this.cards.push(2);
+                        }
                     }
                 }
             });

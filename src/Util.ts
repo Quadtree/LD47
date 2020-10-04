@@ -120,4 +120,6 @@ export class Util
 
         return ret;
     }
+
+    static CHEATS_ENABLED = true;
 }
