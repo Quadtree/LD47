@@ -22,6 +22,9 @@ export class PlayerCharacter extends Character {
 
     private ui:AdvancedDynamicTexture|null = null;
 
+    private healthBar:Rectangle|null = null;
+    private energyBar:Rectangle|null = null;
+
     private static START_POS = new Vector3(0,2,-1.2);
 
     private static baseMesh:AbstractMesh|null;
@@ -45,11 +48,19 @@ export class PlayerCharacter extends Character {
         this.ui = new AdvancedDynamicTexture('', 256, 256, scene);
         //this.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, scene);
 
-        const debugUiText = new TextBlock('', 'left')
+        /*const debugUiText = new TextBlock('', 'left')
         this.ui.addControl(debugUiText)
         debugUiText.color = '#ffffff';
         debugUiText.topInPixels = -120;// -40;
-        debugUiText.leftInPixels = 60;
+        debugUiText.leftInPixels = 60;*/
+
+        const healthBarBackground = new Rectangle();
+        healthBarBackground.background = '#000000';
+        healthBarBackground.topInPixels = -120;
+        healthBarBackground.leftInPixels = 70;
+        healthBarBackground.widthInPixels = 40;
+        healthBarBackground.heightInPixels = 6;
+        this.ui.addControl(healthBarBackground);
 
         const debugUiText2 = new TextBlock('', 'top')
         this.ui.addControl(debugUiText2)
