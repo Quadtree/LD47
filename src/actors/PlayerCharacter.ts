@@ -178,6 +178,12 @@ export class PlayerCharacter extends Character {
                 this.battery = this.maxBattery;
 
                 this.camera.rotation = new Vector3(0, Math.PI / 2, 0);
+
+                if (this.needsFullRespawn){
+                    EnemySpawnPoint.despawnAll(this.actorManager!);
+                    EnemySpawnPoint.respawnAll(this.actorManager!);
+                    this.needsFullRespawn = false;
+                }
             }
 
             if (this.respawnTimer < PlayerCharacter.RESPAWN_PHASE_2_WAKING_UP){
@@ -246,12 +252,14 @@ export class PlayerCharacter extends Character {
         console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
 
         if (this.hp <= 0 && this.respawnTimer === null){
-            EnemySpawnPoint.despawnAll(this.actorManager!);
             this.respawnTimer = 0;
+            this.needsFullRespawn = true;
         }
 
         return amount;
     }
+
+    private needsFullRespawn = false;
 
 
     protected getExtraText(): string {

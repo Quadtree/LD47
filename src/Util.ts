@@ -92,12 +92,17 @@ export class Util
 
         //console.log(Ammo);
 
-        try {
-            var cb = new Ammo.ClosestRayResultCallback();
-            var fromBTV = Util.toBLVector3(from);
-            var toBTV = Util.toBLVector3(to);
+        let fromBTV = null;
+        let toBTV = null;
+        let cb = null;
+        let ret = null;
 
-            var ret = false;
+        try {
+            cb = new Ammo.ClosestRayResultCallback();
+            fromBTV = Util.toBLVector3(from);
+            toBTV = Util.toBLVector3(to);
+
+            ret = false;
 
             world.rayTest(fromBTV, toBTV, cb);
 
