@@ -2,10 +2,12 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
-import {AbstractMesh, Matrix, Quaternion, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Matrix, PBRMaterial, Quaternion, Vector3} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
+import {AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
+import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -17,6 +19,8 @@ export class PlayerCharacter extends Character {
     public powerUps:PowerUpType[] = [];
 
     private gunMesh:AbstractMesh|null = null;
+
+    private ui:AdvancedDynamicTexture|null = null;
 
     private static START_POS = new Vector3(0,2,-1.2);
 
@@ -37,6 +41,26 @@ export class PlayerCharacter extends Character {
         this.gunMesh = PlayerCharacter.baseMesh!.clone("", null, false)!;
         this.gunMesh.getChildMeshes().forEach(it => it.isVisible = true);
         this.gunMesh.scaling = new Vector3(0.4, 0.4, 0.4);
+
+        this.ui = new AdvancedDynamicTexture("", 256, 256, scene);
+
+        const debugUiText = new TextBlock('', 'test')
+        this.ui.addControl(debugUiText)
+        debugUiText.topInPixels = 108;
+
+        const rect = new Rectangle();
+        rect.color = '#ff0000';
+        rect.topInPixels = 10;
+        rect.leftInPixels = 10;
+        rect.heightInPixels = 300;
+        rect.widthInPixels = 300;
+
+        this.ui.addControl(rect);
+
+        if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
+
+        const mat = this.gunMesh.getChildMeshes()[0].material as PBRMaterial;
+        mat.albedoTexture = this.ui;
     }
 
     update(delta: number) {
