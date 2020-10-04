@@ -68,14 +68,27 @@ export class PlayerCharacter extends Character {
         debugUiText2.topInPixels = -30;// -40;
         debugUiText2.leftInPixels = -30;
 
-        if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
+        for (const childMesh of this.gunMesh.getChildMeshes()){
+            if (childMesh.name == ".Cube.001"){
+                const mat = (childMesh.material as PBRMaterial).clone("");
+                mat.emissiveTexture = this.ui;
+                mat.emissiveColor = new Color3(1,1,1);
+                mat.emissiveIntensity = 1;
+                mat.albedoTexture = this.ui;
+                mat.useAlphaFromAlbedoTexture = true;
+                mat.transparencyMode = 2;
+                childMesh.material = mat;
+            }
+        }
+
+        /*if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
 
         const origMat = (this.gunMesh.getChildMeshes()[0].material as PBRMaterial);
         const mat = origMat.clone("");
         mat.emissiveTexture = this.ui;
         mat.emissiveColor = new Color3(1,1,1);
         mat.emissiveIntensity = 1;
-        this.gunMesh.getChildMeshes()[0].material = mat;
+        this.gunMesh.getChildMeshes()[0].material = mat;*/
 
         //const numat = new StandardMaterial('', scene);
         //numat.emissiveTexture = this.ui;
@@ -104,7 +117,7 @@ export class PlayerCharacter extends Character {
 
         const gunOffset = new Vector3(1,-1,2).rotateByQuaternionToRef(Quaternion.FromEulerVector(this.camera.rotation), new Vector3());
         this.gunMesh!.position = this.camera.position.add(gunOffset);
-        this.gunMesh!.rotation = this.camera.rotation;
+        this.gunMesh!.rotation = this.camera.rotation.clone().add(new Vector3(0, 0, Math.PI / 2));
 
         this.shootCharge += delta;
 
