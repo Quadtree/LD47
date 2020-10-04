@@ -27,6 +27,6 @@ export class StartDoor extends Actor {
 
         this.openAmount = Math.min(this.openAmount + delta / 2, 1);
 
-        this.mesh!.rotation = new Vector3(0, this.openAmount * Math.PI / 2, 0);
+        this.mesh!.rotation = new Vector3(0, this.openAmount * Math.PI / 2 + Math.PI, 0);
     }
 }

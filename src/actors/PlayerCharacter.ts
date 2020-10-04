@@ -16,6 +16,8 @@ export class PlayerCharacter extends Character {
     private respawnTimer:number|null = null;
     private battery:number = 1;
 
+    private paralyzedTime = 2;
+
     public powerUps:PowerUpType[] = [];
 
     private gunMesh:AbstractMesh|null = null;
@@ -28,7 +30,7 @@ export class PlayerCharacter extends Character {
     private powerUpIndicators:AbstractMesh[] = [];
     private keyIndicators:AbstractMesh[] = [];
 
-    private static START_POS = new Vector3(0,2,-1.2);
+    private static START_POS = new Vector3(0,2,0);
 
     private static baseMesh:AbstractMesh|null;
 
@@ -132,13 +134,15 @@ export class PlayerCharacter extends Character {
             this.powerUpIndicators[i].isVisible = this.powerUps.includes(i)
         }
 
-        if (this.respawnTimer !== null){
+        if (this.respawnTimer !== null || this.paralyzedTime > 0) {
             this.moveForward = false;
             this.moveBackward = false;
             this.moveLeft = false;
             this.moveRight = false;
             this.wantsToShoot = false;
+        }
 
+        if (this.respawnTimer !== null){
             this.respawnTimer -= delta;
             if (this.respawnTimer <= 0){
                 this.pos = PlayerCharacter.START_POS
@@ -147,6 +151,12 @@ export class PlayerCharacter extends Character {
 
                 this.respawnTimer = null;
             }
+        }
+
+        if (this.paralyzedTime > 0){
+            this.paralyzedTime -= delta;
+
+            this.camera.rotation = new Vector3(0, Math.PI / 2, 0);
         }
 
         super.update(delta);
