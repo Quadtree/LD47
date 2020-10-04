@@ -129,5 +129,5 @@ export class Util
         });
     }
 
-    static CHEATS_ENABLED = true;
+    static CHEATS_ENABLED = false;
 }
