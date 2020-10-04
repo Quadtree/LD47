@@ -57,22 +57,13 @@ export class PlayerCharacter extends Character {
         debugUiText2.topInPixels = -30;// -40;
         debugUiText2.leftInPixels = -30;
 
-        const rect = new Rectangle();
-        rect.color = '#ff0000';
-        //rect.background = '#ff0000';
-        rect.topInPixels = 0;
-        rect.leftInPixels = 0;
-        rect.heightInPixels = 256;
-        rect.widthInPixels = 256;
-
-        this.ui.addControl(rect);
-
         if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
 
-        const mat = this.gunMesh.getChildMeshes()[0].material as PBRMaterial;
+        const mat = (this.gunMesh.getChildMeshes()[0].material as PBRMaterial).clone("");
         mat.emissiveTexture = this.ui;
         mat.emissiveColor = new Color3(1,1,1);
         mat.emissiveIntensity = 1;
+        this.gunMesh.getChildMeshes()[0].material = mat;
 
         //const numat = new StandardMaterial('', scene);
         //numat.emissiveTexture = this.ui;
