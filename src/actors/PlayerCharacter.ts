@@ -25,6 +25,9 @@ export class PlayerCharacter extends Character {
     private healthBar:AbstractMesh|null = null;
     private energyBar:AbstractMesh|null = null;
 
+    private powerUpIndicators:AbstractMesh[] = [];
+    private keyIndicators:AbstractMesh[] = [];
+
     private static START_POS = new Vector3(0,2,-1.2);
 
     private static baseMesh:AbstractMesh|null;
@@ -50,6 +53,12 @@ export class PlayerCharacter extends Character {
                 this.healthBar = childMesh;
             } else if (childMesh.name == ".EnergyBar"){
                 this.energyBar = childMesh;
+            } else if (childMesh.name == ".Key0"){
+                this.keyIndicators[0] = childMesh;
+            } else if (childMesh.name == ".Key1"){
+                this.keyIndicators[1] = childMesh;
+            } else if (childMesh.name == ".Key2"){
+                this.keyIndicators[2] = childMesh;
             }
         }
 
@@ -110,6 +119,10 @@ export class PlayerCharacter extends Character {
     update(delta: number) {
         this.healthBar!.scaling.set(1, 1, Math.max(this.hp, 0));
         this.energyBar!.scaling.set(1, 1, Math.max(this.battery / this.maxBattery, 0));
+
+        for (let i=0;i<this.keyIndicators.length;++i){
+            this.keyIndicators[i].isVisible = this.cards.includes(i)
+        }
 
         if (this.respawnTimer !== null){
             this.moveForward = false;
