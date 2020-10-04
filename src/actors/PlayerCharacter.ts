@@ -338,7 +338,7 @@ export class PlayerCharacter extends Character {
             //console.log(`SHOOT ${this.camera.globalPosition}`);
             this.shootCharge = 0;
 
-            const shotDir = this.camera.getTarget().subtract(this.camera.globalPosition).normalize();
+            const shotDir = new Vector3(0, 0, 1).rotateByQuaternionToRef(this.camera.rotation.subtract(new Vector3(0.04, 0.04, 0)).toQuaternion(), new Vector3());
 
             this.actorManager!.add(new PlayerProjectile(
                 this.gunMesh!.position.add(shotDir.scale(4)),
