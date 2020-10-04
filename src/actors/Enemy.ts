@@ -1,5 +1,13 @@
 import {Character} from "./Character";
-import {AbstractMesh, MeshBuilder, Quaternion, Scene, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    MeshBuilder,
+    PBRMaterial,
+    PBRMetallicRoughnessMaterial,
+    Quaternion,
+    Scene,
+    Vector3
+} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
 import {EnemyProjectile} from "./EnemyProjectile";
@@ -30,6 +38,21 @@ export class Enemy extends Character {
         this.mesh = Enemy.baseMesh!.clone("", null, false)!
         this.mesh.getChildMeshes().forEach(it => it.isVisible = true);
         this.mesh.scaling = new Vector3(0.6, 0.6, 0.6);
+
+        this.mesh.getChildMeshes().forEach(it => {
+            it.material = null;
+            /*if (it.material instanceof PBRMaterial){
+                console.log(it.material);
+                it.material.disableLighting = false;
+
+                const tex = it.material.albedoTexture;
+
+                it.material = new PBRMetallicRoughnessMaterial("", scene);
+                if (it.material instanceof PBRMetallicRoughnessMaterial){
+                    it.material.baseTexture = tex;
+                }
+            }*/
+        });
     }
 
 
@@ -99,6 +122,6 @@ export class Enemy extends Character {
     exitingView() {
         super.exitingView();
 
-        this.mesh.dispose(false, true);
+        this.mesh.dispose(false, false);
     }
 }
