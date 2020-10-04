@@ -1,7 +1,8 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, PointLight, Scene, StandardMaterial, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Color3, PointLight, Scene, StandardMaterial, Vector3} from "@babylonjs/core";
 import {Util} from "../Util";
 import {Character} from "./Character";
+import {Explosion} from "./Explosion";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
@@ -74,5 +75,18 @@ export abstract class Projectile extends Actor {
 
     keep(): boolean {
         return this.life > 0;
+    }
+
+
+    destroyed() {
+        super.destroyed();
+
+        let color = new Color3(1,1,1);
+
+        if (this.mesh!.material instanceof StandardMaterial){
+            color = this.mesh!.material.emissiveColor;
+        }
+
+        this.actorManager!.add(new Explosion(this.pos, 1, color))
     }
 }
