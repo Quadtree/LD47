@@ -60,7 +60,7 @@ export class Util
 
         Util.totalVectors++;
 
-        if (Util.totalVectors > 100){
+        if (Util.totalVectors > 10000){
             console.log (`POSSIBLE MEMORY LEAK ${Util.totalVectors}`);
         }
 

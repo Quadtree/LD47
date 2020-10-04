@@ -173,7 +173,7 @@ export class PlayerCharacter extends Character {
             if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
                 PlayerCharacter.fader.alpha = Math.min(Math.max(PlayerCharacter.fader.alpha - delta / 2, 0), 1);
 
-                this.pos = PlayerCharacter.START_POS
+                this.pos = PlayerCharacter.START_POS.clone();
                 this.hp = 1;
                 this.battery = this.maxBattery;
 
