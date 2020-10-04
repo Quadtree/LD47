@@ -6,7 +6,7 @@ import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, StandardMaterial,
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
-import {AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Image, Rectangle} from "@babylonjs/gui";
 import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 
 export class PlayerCharacter extends Character {
@@ -70,7 +70,8 @@ export class PlayerCharacter extends Character {
 
         if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
 
-        const mat = (this.gunMesh.getChildMeshes()[0].material as PBRMaterial).clone("");
+        const origMat = (this.gunMesh.getChildMeshes()[0].material as PBRMaterial);
+        const mat = origMat.clone("");
         mat.emissiveTexture = this.ui;
         mat.emissiveColor = new Color3(1,1,1);
         mat.emissiveIntensity = 1;
