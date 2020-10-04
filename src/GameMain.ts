@@ -24,6 +24,7 @@ import {EnemySpawnPoint} from "./actors/EnemySpawnPoint";
 import {GLTFFileLoader} from "@babylonjs/loaders";
 import {PowerUp, PowerUpType} from "./actors/PowerUp";
 import {Enemy} from "./actors/Enemy";
+import {StartDoor} from "./actors/StartDoor";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -74,6 +75,7 @@ export class GameMain {
         await Promise.all([
             Enemy.load(this._scene),
             PlayerCharacter.load(this._scene),
+            StartDoor.load(this._scene),
         ]);
 
         let chr = new PlayerCharacter(this._scene, this._canvas);
@@ -142,6 +144,8 @@ export class GameMain {
         backgroundSphereMat.specularColor = new Color3(0,0,0);
         backgroundSphereMat.backFaceCulling = false;
         backgroundSphere.material = backgroundSphereMat;
+
+        this.actorManager.add(new StartDoor());
 
         this.needsSpawn = true;
     }
