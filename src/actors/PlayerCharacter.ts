@@ -40,11 +40,6 @@ export class PlayerCharacter extends Character {
     }
 
     update(delta: number) {
-        const gunOffset = new Vector3(1,-1,2).rotateByQuaternionToRef(Quaternion.FromEulerVector(this.camera.rotation), new Vector3());
-
-        this.gunMesh!.position = this.camera.position.add(gunOffset);
-        this.gunMesh!.rotation = this.camera.rotation;
-
         if (this.respawnTimer !== null){
             this.moveForward = false;
             this.moveBackward = false;
@@ -64,15 +59,21 @@ export class PlayerCharacter extends Character {
 
         super.update(delta);
 
+        const gunOffset = new Vector3(1,-1,2).rotateByQuaternionToRef(Quaternion.FromEulerVector(this.camera.rotation), new Vector3());
+        this.gunMesh!.position = this.camera.position.add(gunOffset);
+        this.gunMesh!.rotation = this.camera.rotation;
+
         this.shootCharge += delta;
 
         if (this.wantsToShoot && this.shootCharge >= 0.3 && this.battery >= this.actorManager!.currentDifficultySettings.energyCostPerShot){
             //console.log(`SHOOT ${this.camera.globalPosition}`);
             this.shootCharge = 0;
 
+            const shotDir = this.camera.getTarget().subtract(this.camera.globalPosition).normalize();
+
             this.actorManager!.add(new PlayerProjectile(
-                this.gunMesh!.position,
-                this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40),
+                this.gunMesh!.position.add(shotDir.scale(4)),
+                shotDir.scale(40),
                 this.actorManager!.currentDifficultySettings.playerDamage,
                 this.powerUps.includes(PowerUpType.Attack)
             ));
