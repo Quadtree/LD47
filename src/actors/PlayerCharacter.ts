@@ -22,8 +22,8 @@ export class PlayerCharacter extends Character {
 
     private ui:AdvancedDynamicTexture|null = null;
 
-    private healthBar:Rectangle|null = null;
-    private energyBar:Rectangle|null = null;
+    private healthBar:AbstractMesh|null = null;
+    private energyBar:AbstractMesh|null = null;
 
     private static START_POS = new Vector3(0,2,-1.2);
 
@@ -45,7 +45,15 @@ export class PlayerCharacter extends Character {
         this.gunMesh.getChildMeshes().forEach(it => it.isVisible = true);
         this.gunMesh.scaling = new Vector3(0.4, 0.4, 0.4);
 
-        this.ui = new AdvancedDynamicTexture('', 256, 256, scene);
+        for (const childMesh of this.gunMesh.getChildMeshes()) {
+            if (childMesh.name == ".HealthBar") {
+                this.healthBar = childMesh;
+            } else if (childMesh.name == ".EnergyBar"){
+                this.energyBar = childMesh;
+            }
+        }
+
+        //this.ui = new AdvancedDynamicTexture('', 256, 256, scene);
         //this.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, scene);
 
         /*const debugUiText = new TextBlock('', 'left')
@@ -54,7 +62,7 @@ export class PlayerCharacter extends Character {
         debugUiText.topInPixels = -120;// -40;
         debugUiText.leftInPixels = 60;*/
 
-        const healthBarBackground = new Rectangle();
+        /*const healthBarBackground = new Rectangle();
         healthBarBackground.background = '#000000';
         healthBarBackground.topInPixels = -120;
         healthBarBackground.leftInPixels = 70;
@@ -79,7 +87,7 @@ export class PlayerCharacter extends Character {
                 mat.transparencyMode = 2;
                 childMesh.material = mat;
             }
-        }
+        }*/
 
         /*if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
 
@@ -95,7 +103,14 @@ export class PlayerCharacter extends Character {
         //this.gunMesh.getChildMeshes()[0].material = numat;
     }
 
+    private get maxBattery(){
+        return 1 + (this.powerUps.includes(PowerUpType.Charge) ? 1 : 0);
+    }
+
     update(delta: number) {
+        this.healthBar!.scaling.set(1, 1, Math.max(this.hp, 0));
+        this.energyBar!.scaling.set(1, 1, Math.max(this.battery / this.maxBattery, 0));
+
         if (this.respawnTimer !== null){
             this.moveForward = false;
             this.moveBackward = false;
@@ -107,7 +122,7 @@ export class PlayerCharacter extends Character {
             if (this.respawnTimer <= 0){
                 this.pos = PlayerCharacter.START_POS
                 this.hp = 1;
-                this.battery = 1 + (this.powerUps.includes(PowerUpType.Charge) ? 1 : 0);
+                this.battery = this.maxBattery;
 
                 this.respawnTimer = null;
             }
