@@ -2,7 +2,17 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
-import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, Sound, StandardMaterial, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    AudioEngine,
+    Color3, Engine,
+    Matrix,
+    PBRMaterial,
+    Quaternion,
+    Sound,
+    StandardMaterial,
+    Vector3
+} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
@@ -11,7 +21,7 @@ import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 import {StartDoor} from "./StartDoor";
 import {ActorManager, DifficultySettings} from "../am/ActorManager";
 import {ExitDoor} from "./ExitDoor";
-import {canvasGlobal} from "../GameMain";
+import {canvasGlobal, globalEngine} from "../GameMain";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -219,7 +229,9 @@ export class PlayerCharacter extends Character {
             //this.gameStarted = true;
             //this.fader!.alpha = 0;
 
-            actorManager.ui!.addControl(difficultyScreen)
+            actorManager.ui!.addControl(difficultyScreen);
+
+            Engine.audioEngine.unlock();
         });
 
     }

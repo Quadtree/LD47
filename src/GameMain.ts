@@ -29,6 +29,7 @@ import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import {Projectile} from "./actors/Projectile";
 
 export let canvasGlobal:HTMLCanvasElement;
+export let globalEngine:Engine;
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -45,6 +46,7 @@ export class GameMain {
         this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
         canvasGlobal = this._canvas;
         this._engine = new Engine(this._canvas, true);
+        globalEngine = this._engine;
 
         // Create a basic BJS Scene object.
         this._scene = new Scene(this._engine);
