@@ -153,6 +153,11 @@ export class PlayerCharacter extends Character {
     private static titleScreen:Image;
 
     public static createFader(actorManager:ActorManager){
+        const crosshair = new Image("", "assets/crosshair.png");
+        crosshair.widthInPixels = 64;
+        crosshair.heightInPixels = 64;
+        actorManager.ui!.addControl(crosshair);
+
         PlayerCharacter.fader = new Rectangle("");
         PlayerCharacter.fader.background = "#000000";
         PlayerCharacter.fader.color = "#000000";
