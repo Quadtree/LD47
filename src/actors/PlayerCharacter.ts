@@ -21,7 +21,7 @@ import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 import {StartDoor} from "./StartDoor";
 import {ActorManager, DifficultySettings} from "../am/ActorManager";
 import {ExitDoor} from "./ExitDoor";
-import {canvasGlobal, globalEngine} from "../GameMain";
+import {canvasGlobal, globalEngine, globalGameMain} from "../GameMain";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -237,6 +237,11 @@ export class PlayerCharacter extends Character {
             actorManager.ui!.addControl(difficultyScreen);
 
             Engine.audioEngine.unlock();
+
+            globalGameMain.musicLoading.then(it => {
+                it.setVolume(0.5);
+                it.play();
+            });
         });
 
     }

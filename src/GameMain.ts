@@ -16,7 +16,7 @@ import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {ActorManager} from './am/ActorManager';
 import {Character} from './actors/Character';
-import {Color3, PBRMaterial, StandardMaterial} from "@babylonjs/core";
+import {Color3, PBRMaterial, Sound, StandardMaterial} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
@@ -27,6 +27,7 @@ import {Enemy} from "./actors/Enemy";
 import {StartDoor} from "./actors/StartDoor";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import {Projectile} from "./actors/Projectile";
+import {Util} from "./Util";
 
 export let canvasGlobal:HTMLCanvasElement;
 export let globalEngine:Engine;
@@ -40,6 +41,8 @@ export class GameMain {
     public shadowGenerator:ShadowGenerator;
     private actorManager = new ActorManager()
     private character:Character|null = null
+
+    public musicLoading:Promise<Sound>;
 
     constructor(canvasElement : string) {
 
@@ -76,6 +79,8 @@ export class GameMain {
         this.shadowGenerator.usePercentageCloserFiltering = true
 
         this.actorManager.scene = this._scene
+
+        this.musicLoading = Util.loadSound("assets/slowpiano2.ogg", this._scene, true);
     }
 
     private sphere:any;

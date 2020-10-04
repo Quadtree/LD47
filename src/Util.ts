@@ -121,11 +121,11 @@ export class Util
         return ret;
     }
 
-    static loadSound(url:string, scene:Scene):Promise<Sound> {
+    static loadSound(url:string, scene:Scene, loop:boolean = false):Promise<Sound> {
         return new Promise<Sound>((resolve, reject) => {
             const sound = new Sound("", url, scene, () => {
                 resolve(sound);
-            }, {loop: false, autoplay: false});
+            }, {loop: loop, autoplay: false});
         });
     }
 
