@@ -57,6 +57,8 @@ export class Character extends Actor
 
     private ghostObject:any;
 
+    protected acceptingInput = true;
+
     public cards:CardConsoleColor[] = [];
 
     public get pos(){
@@ -113,14 +115,16 @@ export class Character extends Actor
 
         if (this.canvas){
             this.scene.onKeyboardObservable.add((ed:KeyboardInfo, es:EventState) => {
-                if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP){
-                    const evt = ed.event as KeyboardEvent;
-                    const down = ed.type == KeyboardEventTypes.KEYDOWN;
-                    if (evt.keyCode == Keys.W) this.moveForward = down;
-                    if (evt.keyCode == Keys.S) this.moveBackward = down;
-                    if (evt.keyCode == Keys.A) this.moveLeft = down;
-                    if (evt.keyCode == Keys.D) this.moveRight = down;
-                    if (evt.keyCode == Keys.Space) this.jump = down;
+                if (this.acceptingInput) {
+                    if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP) {
+                        const evt = ed.event as KeyboardEvent;
+                        const down = ed.type == KeyboardEventTypes.KEYDOWN;
+                        if (evt.keyCode == Keys.W) this.moveForward = down;
+                        if (evt.keyCode == Keys.S) this.moveBackward = down;
+                        if (evt.keyCode == Keys.A) this.moveLeft = down;
+                        if (evt.keyCode == Keys.D) this.moveRight = down;
+                        if (evt.keyCode == Keys.Space) this.jump = down;
+                    }
                 }
             });
 
@@ -132,16 +136,18 @@ export class Character extends Actor
             debugUiText.color = '#ffffff'
 
             this.scene.onPointerObservable.add((ed:PointerInfo, es:EventState) => {
-                if (ed.type == PointerEventTypes.POINTERTAP && ed.event instanceof PointerEvent){
-                    this.canvas!.requestPointerLock();
-                }
-                if (ed.type == PointerEventTypes.POINTERDOWN){
-                    if (!this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)){
-                        this.pointerDown();
+                if (this.acceptingInput) {
+                    if (ed.type == PointerEventTypes.POINTERTAP && ed.event instanceof PointerEvent) {
+                        this.canvas!.requestPointerLock();
                     }
-                }
-                if (ed.type == PointerEventTypes.POINTERUP){
-                    this.pointerUp();
+                    if (ed.type == PointerEventTypes.POINTERDOWN) {
+                        if (!this.canvas!.hasPointerCapture((ed.event as PointerEvent).pointerId)) {
+                            this.pointerDown();
+                        }
+                    }
+                    if (ed.type == PointerEventTypes.POINTERUP) {
+                        this.pointerUp();
+                    }
                 }
             });
         }

@@ -78,8 +78,10 @@ export class GameMain {
             PlayerCharacter.load(this._scene),
             StartDoor.load(this._scene),
         ]);
-        
+
         this.actorManager.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, this._scene);
+
+        PlayerCharacter.createFader(this.actorManager)
 
         let chr = new PlayerCharacter(this._scene, this._canvas);
         this.actorManager.add(chr);

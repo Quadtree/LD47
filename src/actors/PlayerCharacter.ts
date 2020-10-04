@@ -9,6 +9,7 @@ import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 import {AdvancedDynamicTexture, Image, Rectangle} from "@babylonjs/gui";
 import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 import {StartDoor} from "./StartDoor";
+import {ActorManager} from "../am/ActorManager";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -42,6 +43,8 @@ export class PlayerCharacter extends Character {
     private static baseMesh:AbstractMesh|null;
 
     private static fader:Rectangle|null = null;
+
+    public static gameStarted = false;
 
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/player_gun.glb', '', scene)).meshes[0];
@@ -131,17 +134,36 @@ export class PlayerCharacter extends Character {
         return 1 + (this.powerUps.includes(PowerUpType.Charge) ? 1 : 0);
     }
 
-    update(delta: number) {
-        if (PlayerCharacter.fader == null){
-            PlayerCharacter.fader = new Rectangle("");
-            PlayerCharacter.fader.background = "#000000";
-            PlayerCharacter.fader.color = "#000000";
-            PlayerCharacter.fader.widthInPixels = 5000;
-            PlayerCharacter.fader.heightInPixels = 5000;
-            PlayerCharacter.fader.alpha = 0.0;
+    private static titleScreen:Image;
 
-            this.actorManager!.ui!.addControl(PlayerCharacter.fader);
-        }
+    public static createFader(actorManager:ActorManager){
+        PlayerCharacter.fader = new Rectangle("");
+        PlayerCharacter.fader.background = "#000000";
+        PlayerCharacter.fader.color = "#000000";
+        PlayerCharacter.fader.widthInPixels = 5000;
+        PlayerCharacter.fader.heightInPixels = 5000;
+        PlayerCharacter.fader.alpha = 1.0;
+
+        actorManager.ui!.addControl(PlayerCharacter.fader);
+
+        this.titleScreen = new Image("", "assets/title_screen.png");
+        this.titleScreen.stretch = Image.STRETCH_NONE;
+        this.titleScreen.widthInPixels = 800;
+        this.titleScreen.heightInPixels = 800;
+        actorManager.ui!.addControl(this.titleScreen);
+        this.titleScreen.isPointerBlocker = true;
+
+        this.titleScreen.onPointerClickObservable.add((a, b) => {
+            this.titleScreen.isVisible = false;
+            this.gameStarted = true;
+            this.fader!.alpha = 0;
+        })
+    }
+
+    update(delta: number) {
+        this.acceptingInput = PlayerCharacter.gameStarted;
+
+        if (!PlayerCharacter.gameStarted) return;
 
         this.healthBar!.scaling.set(1, 1, Math.max(this.hp, 0));
         this.energyBar!.scaling.set(1, 1, Math.max(this.battery / this.maxBattery, 0));
@@ -167,11 +189,11 @@ export class PlayerCharacter extends Character {
 
             if (this.respawnTimer < PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
                 // player is still falling unconscious
-                PlayerCharacter.fader.alpha = Math.min(Math.max(PlayerCharacter.fader.alpha + delta / 2, 0), 1);
+                PlayerCharacter.fader!.alpha = Math.min(Math.max(PlayerCharacter.fader!.alpha + delta / 2, 0), 1);
             }
 
             if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
-                PlayerCharacter.fader.alpha = Math.min(Math.max(PlayerCharacter.fader.alpha - delta / 2, 0), 1);
+                PlayerCharacter.fader!.alpha = Math.min(Math.max(PlayerCharacter.fader!.alpha - delta / 2, 0), 1);
 
                 this.pos = PlayerCharacter.START_POS.clone();
                 this.hp = 1;
