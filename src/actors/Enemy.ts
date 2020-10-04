@@ -12,6 +12,7 @@ import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
 import {EnemyProjectile} from "./EnemyProjectile";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
+import {Explosion} from "./Explosion";
 
 export class Enemy extends Character {
     public removed:boolean = false;
@@ -126,6 +127,11 @@ export class Enemy extends Character {
     takeDamage(amount: number): number {
         this.hp -= amount;
         console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
+
+        if (this.hp <= 0){
+            this.actorManager!.add(new Explosion(this.pos.add(new Vector3(0, -1, 0)), 1, new Color3(1, 0.5, 0)));
+        }
+
         return amount;
     }
 
