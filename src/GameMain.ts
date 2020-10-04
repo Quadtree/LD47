@@ -181,12 +181,19 @@ export class GameMain {
     async doRender() {
         await this.init();
 
+        let lastRun = new Date().getTime() / 1000;
+
         // Run the render loop.
         this._engine.runRenderLoop(() => {
             //this.sphere.position.y = 4 + Math.random();
             this._scene.render();
 
-            this.actorManager.update(0.016)
+            const currentTime = new Date().getTime() / 1000;
+            const delta = currentTime - lastRun;
+            lastRun = currentTime;
+
+
+            this.actorManager.update(delta)
 
             if (this.needsSpawn){
                 EnemySpawnPoint.respawnAll(this.actorManager);
