@@ -73,7 +73,7 @@ export class ExitDoor extends Actor {
             this.textBox!.text = `POD BAY\n\n` +
                 `${this.currentDate.getFullYear()}/${(this.currentDate.getMonth()+1).toString().padStart(2, '0')}/${this.currentDate.getDate().toString().padStart(2, '0')}` +
                 ` ${this.currentDate.getHours().toString().padStart(2, '0')}:${this.currentDate.getMinutes().toString().padStart(2, '0')}:${this.currentDate.getSeconds().toString().padStart(2, '0')}` +
-                `\n\nNeed ${3 - pc.cards.length} more keys to open`;
+                `\n\nNeed ${3 - pc.cards.length} more key(s) to open`;
 
             if (pc.pos.subtract(this.pos).length() < 4){
                 if (pc.cards.includes(CardConsoleColor.Red) && pc.cards.includes(CardConsoleColor.Green) && pc.cards.includes(CardConsoleColor.Blue) && !ExitDoor.shownWinScreen){
