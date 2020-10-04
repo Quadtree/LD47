@@ -119,7 +119,6 @@ export class Character extends Actor
                     if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP) {
                         const evt = ed.event as KeyboardEvent;
                         const down = ed.type == KeyboardEventTypes.KEYDOWN;
-                        console.log(evt.key);
                         if (evt.keyCode == Keys.W) this.moveForward = down;
                         if (evt.keyCode == Keys.S) this.moveBackward = down;
                         if (evt.keyCode == Keys.A) this.moveLeft = down;

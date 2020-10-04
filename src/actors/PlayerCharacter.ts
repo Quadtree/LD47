@@ -42,7 +42,7 @@ export class PlayerCharacter extends Character {
 
     private static baseMesh:AbstractMesh|null;
 
-    private static fader:Rectangle|null = null;
+    public static fader:Rectangle|null = null;
 
     public static gameStarted = false;
 

@@ -64,7 +64,7 @@ export abstract class Projectile extends Actor {
             console.log("HIT SOMETHING");
 
             for (const actor of this.actorManager!.actors){
-                if (actor instanceof Character && actor.pos.subtract(this.mesh!.position).length() < 3) {
+                if (actor instanceof Character && actor.pos.subtract(this.mesh!.position).length() < 4) {
                     if ((actor as any).takeDamage && this.canHit(actor)) {
                         (actor as any).takeDamage(this.damage);
                     }
