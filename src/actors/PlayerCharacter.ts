@@ -195,7 +195,7 @@ export class PlayerCharacter extends Character {
                 enemyProjectileSpeed: 40,
                 playerDamage: 0.2,
                 energyCostPerShot: 0.06,
-                enemyTurnRate: 0.10,
+                enemyTurnRate: 0.07,
             },
             {
                 enemyDamage: 0.45,

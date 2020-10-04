@@ -95,7 +95,7 @@ export class Enemy extends Character {
             if (!Util.rayTest(this.scene, this.pos.add(towardsPCNormalized.scale(2)), pc.pos.add(towardsEnemyNormalized.scale(2)))){
                 const targetRotation = Quaternion.FromEulerAngles(0, Math.atan2(deltaPos.x, deltaPos.z), 0);
                 const currentRotation = Quaternion.FromEulerVector(this.camera.rotation);
-                this.camera.rotation = Quaternion.Slerp(currentRotation, targetRotation, 0.03).toEulerAngles();
+                this.camera.rotation = Quaternion.Slerp(currentRotation, targetRotation, this.actorManager!.currentDifficultySettings.enemyTurnRate).toEulerAngles();
 
                 canSeePC = true;
                 this.attackCharge += delta;
