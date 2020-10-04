@@ -1,4 +1,4 @@
-import {Scene} from "@babylonjs/core";
+import {Scene, Sound} from "@babylonjs/core";
 import {AmmoJSPlugin} from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
 import {Vector3} from "@babylonjs/core/Maths/math.vector";
 
@@ -119,6 +119,14 @@ export class Util
         //console.log("RAY TEST DONE");
 
         return ret;
+    }
+
+    static loadSound(url:string, scene:Scene):Promise<Sound> {
+        return new Promise<Sound>((resolve, reject) => {
+            const sound = new Sound("", url, scene, () => {
+                resolve(sound);
+            }, {loop: false, autoplay: false});
+        });
     }
 
     static CHEATS_ENABLED = true;
