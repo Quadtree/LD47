@@ -3,7 +3,7 @@ import {
     Color3,
     MeshBuilder, PBRMaterial,
     PBRMetallicRoughnessMaterial,
-    Scene,
+    Scene, StandardMaterial,
     Texture,
     Vector3
 } from "@babylonjs/core";
@@ -35,16 +35,26 @@ export class PowerUp extends Actor {
 
         this.mesh = MeshBuilder.CreatePlane("sp1", {size: 2}, scene);
 
-        const material = new PBRMaterial("matmat", scene);
-        material.albedoTexture = new Texture(powerUpGraphics[type], scene);
-        material.emissiveTexture = new Texture(powerUpGraphics[type], scene);
-        material.emissiveColor = new Color3(1,1,1);
-        material.transparencyMode = 2;
-        material.useAlphaFromAlbedoTexture = true;
-        material.roughness = 1;
-        material.metallic = 1;
+        //const material = new StandardMaterial("matmat", scene);
+        //material.emissiveTexture = new Texture(powerUpGraphics[type], scene);
+        //material.diffuseTexture = new Texture(powerUpGraphics[type], scene);
 
-        this.mesh.material = material;
+        //material.emissiveColor = new Color3(1,1,1);
+        //material.alphaCutOff = 0.5;
+
+        const texture = new Texture(powerUpGraphics[type], scene);
+        texture.hasAlpha = true;
+
+        const mat = new PBRMaterial("", scene);
+        mat.emissiveTexture = texture;
+        mat.emissiveColor = new Color3(1,1,1);
+        mat.emissiveIntensity = 1;
+        mat.albedoTexture = texture;
+        mat.useAlphaFromAlbedoTexture = true;
+        mat.transparencyMode = 2;
+        mat.backFaceCulling = false;
+
+        this.mesh.material = mat;
 
         this.mesh.position.copyFrom(this.pos);
 
@@ -55,6 +65,8 @@ export class PowerUp extends Actor {
 
     update(delta: number) {
         super.update(delta);
+
+        this.mesh.rotation.y += delta * 2;
 
         const pcList = this.actorManager!.actors.filter(it => it instanceof PlayerCharacter);
         if (pcList.length){
