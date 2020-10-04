@@ -136,6 +136,10 @@ export class GameMain {
         const backgroundSphere = MeshBuilder.CreateIcoSphere("", {radius: 400}, this._scene);
         const backgroundSphereMat = new StandardMaterial("", this._scene);
         backgroundSphereMat.emissiveTexture = new Texture("assets/starfield.png", this._scene);
+        (backgroundSphereMat.emissiveTexture as Texture).vScale = 5;
+        (backgroundSphereMat.emissiveTexture as Texture).uScale = 5;
+        backgroundSphereMat.diffuseColor = new Color3(0,0,0);
+        backgroundSphereMat.specularColor = new Color3(0,0,0);
         backgroundSphereMat.backFaceCulling = false;
         backgroundSphere.material = backgroundSphereMat;
 
