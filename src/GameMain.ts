@@ -145,7 +145,11 @@ export class GameMain {
                 child.dispose();
             } else {
                 console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
-                child.receiveShadows = true;
+                if (child.name.includes("Walls")) {
+                    child.receiveShadows = true;
+                } else {
+                    this.shadowGenerator.addShadowCaster(child);
+                }
             }
         }
 
