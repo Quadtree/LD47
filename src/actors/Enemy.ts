@@ -1,11 +1,11 @@
 import {Character} from "./Character";
 import {
-    AbstractMesh,
+    AbstractMesh, Color3,
     MeshBuilder,
     PBRMaterial,
     PBRMetallicRoughnessMaterial,
     Quaternion,
-    Scene,
+    Scene, StandardMaterial,
     Vector3
 } from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
@@ -40,7 +40,18 @@ export class Enemy extends Character {
         this.mesh.scaling = new Vector3(0.6, 0.6, 0.6);
 
         this.mesh.getChildMeshes().forEach(it => {
-            it.material = null;
+
+            //if (it.material instanceof PBRMaterial){
+            //    it.material.maxSimultaneousLights = 12;
+            //}
+
+            //it.material = null;
+
+            //it.material = new StandardMaterial("", scene);
+            //if (it.material instanceof StandardMaterial){
+            //    it.material.diffuseColor = new Color3(1, 0.7, 0.7);
+            //}
+
             /*if (it.material instanceof PBRMaterial){
                 console.log(it.material);
                 it.material.disableLighting = false;

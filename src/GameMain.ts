@@ -16,7 +16,7 @@ import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {ActorManager} from './am/ActorManager';
 import {Character} from './actors/Character';
-import {Color3} from "@babylonjs/core";
+import {Color3, PBRMaterial} from "@babylonjs/core";
 import {PlayerCharacter} from "./actors/PlayerCharacter";
 import {CardConsole, CardConsoleColor} from "./actors/CardConsole";
 import {ExitDoor} from "./actors/ExitDoor";
@@ -35,6 +35,7 @@ export class GameMain {
     private character:Character|null = null
 
     constructor(canvasElement : string) {
+
         // Create canvas and engine.
         this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
         this._engine = new Engine(this._canvas, true);
@@ -43,6 +44,8 @@ export class GameMain {
         this._scene = new Scene(this._engine);
         this._scene.collisionsEnabled = true
         this._scene.gravity = new Vector3(0, -0.1, 0)
+
+        //this._scene.createDefaultEnvironment();
 
         this._scene.enablePhysics(new Vector3(0, -9.8, 0), new AmmoJSPlugin())
 
