@@ -2,7 +2,7 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
-import {AbstractMesh, Matrix, PBRMaterial, Quaternion, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, StandardMaterial, Vector3} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
@@ -42,25 +42,41 @@ export class PlayerCharacter extends Character {
         this.gunMesh.getChildMeshes().forEach(it => it.isVisible = true);
         this.gunMesh.scaling = new Vector3(0.4, 0.4, 0.4);
 
-        this.ui = new AdvancedDynamicTexture("", 256, 256, scene);
+        this.ui = new AdvancedDynamicTexture('', 256, 256, scene);
+        //this.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, scene);
 
-        const debugUiText = new TextBlock('', 'test')
+        const debugUiText = new TextBlock('', 'left')
         this.ui.addControl(debugUiText)
-        debugUiText.topInPixels = 108;
+        debugUiText.color = '#ffffff';
+        debugUiText.topInPixels = -120;// -40;
+        debugUiText.leftInPixels = 60;
+
+        const debugUiText2 = new TextBlock('', 'top')
+        this.ui.addControl(debugUiText2)
+        debugUiText2.color = '#ffffff';
+        debugUiText2.topInPixels = -30;// -40;
+        debugUiText2.leftInPixels = -30;
 
         const rect = new Rectangle();
         rect.color = '#ff0000';
-        rect.topInPixels = 10;
-        rect.leftInPixels = 10;
-        rect.heightInPixels = 300;
-        rect.widthInPixels = 300;
+        //rect.background = '#ff0000';
+        rect.topInPixels = 0;
+        rect.leftInPixels = 0;
+        rect.heightInPixels = 256;
+        rect.widthInPixels = 256;
 
         this.ui.addControl(rect);
 
         if (this.gunMesh.getChildMeshes().length != 1) throw 'not one';
 
         const mat = this.gunMesh.getChildMeshes()[0].material as PBRMaterial;
-        mat.albedoTexture = this.ui;
+        mat.emissiveTexture = this.ui;
+        mat.emissiveColor = new Color3(1,1,1);
+        mat.emissiveIntensity = 1;
+
+        //const numat = new StandardMaterial('', scene);
+        //numat.emissiveTexture = this.ui;
+        //this.gunMesh.getChildMeshes()[0].material = numat;
     }
 
     update(delta: number) {
