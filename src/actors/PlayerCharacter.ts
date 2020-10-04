@@ -59,6 +59,10 @@ export class PlayerCharacter extends Character {
                 this.keyIndicators[1] = childMesh;
             } else if (childMesh.name == ".Key2"){
                 this.keyIndicators[2] = childMesh;
+            } else if (childMesh.name == ".Powerup0"){
+                this.powerUpIndicators[0] = childMesh;
+            } else if (childMesh.name == ".Powerup1"){
+                this.powerUpIndicators[1] = childMesh;
             }
         }
 
@@ -122,6 +126,10 @@ export class PlayerCharacter extends Character {
 
         for (let i=0;i<this.keyIndicators.length;++i){
             this.keyIndicators[i].isVisible = this.cards.includes(i)
+        }
+
+        for (let i=0;i<this.powerUpIndicators.length;++i){
+            this.powerUpIndicators[i].isVisible = this.powerUps.includes(i)
         }
 
         if (this.respawnTimer !== null){
