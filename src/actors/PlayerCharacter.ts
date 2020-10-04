@@ -2,9 +2,10 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
-import {Vector3} from "@babylonjs/core";
+import {AbstractMesh, Matrix, Quaternion, Vector3} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -15,13 +16,35 @@ export class PlayerCharacter extends Character {
 
     public powerUps:PowerUpType[] = [];
 
+    private gunMesh:AbstractMesh|null = null;
+
     private static START_POS = new Vector3(0,2,-1.2);
+
+    private static baseMesh:AbstractMesh|null;
+
+    public static async load(scene:Scene){
+        this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/player_gun.glb', '', scene)).meshes[0];
+        this.baseMesh.getChildMeshes().forEach(it => it.isVisible = false);
+    }
 
     public constructor(scene:Scene, canvas:HTMLCanvasElement|null){
         super(scene, canvas, PlayerCharacter.START_POS);
+
+        if (PlayerCharacter.baseMesh == null){
+            throw 'PlayerCharacter.load() was never called?';
+        }
+
+        this.gunMesh = PlayerCharacter.baseMesh!.clone("", null, false)!;
+        this.gunMesh.getChildMeshes().forEach(it => it.isVisible = true);
+        this.gunMesh.scaling = new Vector3(0.4, 0.4, 0.4);
     }
 
     update(delta: number) {
+        const gunOffset = new Vector3(1,-1,2).rotateByQuaternionToRef(Quaternion.FromEulerVector(this.camera.rotation), new Vector3());
+
+        this.gunMesh!.position = this.camera.position.add(gunOffset);
+        this.gunMesh!.rotation = this.camera.rotation;
+
         if (this.respawnTimer !== null){
             this.moveForward = false;
             this.moveBackward = false;
@@ -48,16 +71,11 @@ export class PlayerCharacter extends Character {
             this.shootCharge = 0;
 
             this.actorManager!.add(new PlayerProjectile(
-                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
+                this.gunMesh!.position,
                 this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(40),
                 this.actorManager!.currentDifficultySettings.playerDamage,
                 this.powerUps.includes(PowerUpType.Attack)
             ));
-
-            Util.rayTest(this.scene,
-                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(1.2)),
-                this.camera.globalPosition.add(this.camera.getTarget().subtract(this.camera.globalPosition).normalize().scale(4))
-            );
 
             this.battery -= this.actorManager!.currentDifficultySettings.energyCostPerShot;
         }

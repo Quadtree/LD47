@@ -66,9 +66,6 @@ export class GameMain {
         this.shadowGenerator.usePercentageCloserFiltering = true
 
         this.actorManager.scene = this._scene
-
-        let chr = new PlayerCharacter(this._scene, this._canvas);
-        this.actorManager.add(chr);
     }
 
     private sphere:any;
@@ -76,7 +73,11 @@ export class GameMain {
     async init(){
         await Promise.all([
             Enemy.load(this._scene),
+            PlayerCharacter.load(this._scene),
         ]);
+
+        let chr = new PlayerCharacter(this._scene, this._canvas);
+        this.actorManager.add(chr);
 
         await this.createMeshTerrain();
     }
@@ -137,6 +138,8 @@ export class GameMain {
     private needsSpawn:boolean = false;
 
     async doRender() {
+        await this.init();
+
         // Run the render loop.
         this._engine.runRenderLoop(() => {
             //this.sphere.position.y = 4 + Math.random();
@@ -157,6 +160,6 @@ export class GameMain {
             this._engine.resize();
         });
 
-        await this.init()
+
     }
 }
