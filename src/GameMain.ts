@@ -30,17 +30,20 @@ import {Projectile} from "./actors/Projectile";
 
 export let canvasGlobal:HTMLCanvasElement;
 export let globalEngine:Engine;
+export let globalGameMain:GameMain;
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
     private _engine: Engine;
     private _scene: Scene;
     //private _camera: FreeCamera;
-    private shadowGenerator:ShadowGenerator;
+    public shadowGenerator:ShadowGenerator;
     private actorManager = new ActorManager()
     private character:Character|null = null
 
     constructor(canvasElement : string) {
+
+        globalGameMain = this;
 
         // Create canvas and engine.
         this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
@@ -57,15 +60,14 @@ export class GameMain {
 
         this._scene.enablePhysics(new Vector3(0, -9.8, 0), new AmmoJSPlugin())
 
-        // Create a basic light, aiming 0,1,0 - meaning, to the sky.
         const skyLight = new HemisphericLight('light1', new Vector3(0,1,0), this._scene);
-        skyLight.intensity = 0.4
+        skyLight.intensity = 0.2
 
         const skyLight2 = new HemisphericLight('light1', new Vector3(0,-1,0), this._scene);
-        skyLight2.intensity = 0.1
+        skyLight2.intensity = 0.05
 
-        const directionalLight = new DirectionalLight("light2", new Vector3(-0.4,-1,-0.5), this._scene)
-        directionalLight.intensity = 0.5
+        const directionalLight = new DirectionalLight("light2", new Vector3(-1,-1,-1), this._scene)
+        directionalLight.intensity = 1
         directionalLight.shadowEnabled = true
         directionalLight.autoCalcShadowZBounds = true
 
@@ -143,6 +145,7 @@ export class GameMain {
                 child.dispose();
             } else {
                 console.log(`non marker ${child.name} ${child.position} ${child.rotation}`);
+                child.receiveShadows = true;
             }
         }
 

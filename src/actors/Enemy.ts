@@ -13,6 +13,7 @@ import {Util} from "../Util";
 import {EnemyProjectile} from "./EnemyProjectile";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 import {Explosion} from "./Explosion";
+import {globalGameMain} from "../GameMain";
 
 export class Enemy extends Character {
     public removed:boolean = false;
@@ -48,6 +49,8 @@ export class Enemy extends Character {
         this.mesh.scaling = new Vector3(0.6, 0.6, 0.6);
 
         this.mesh.getChildMeshes().forEach(it => {
+
+            globalGameMain.shadowGenerator.addShadowCaster(it);
 
             //if (it.material instanceof PBRMaterial){
             //    it.material.maxSimultaneousLights = 12;
