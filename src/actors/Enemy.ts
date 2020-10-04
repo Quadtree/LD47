@@ -5,7 +5,7 @@ import {
     PBRMaterial,
     PBRMetallicRoughnessMaterial,
     Quaternion,
-    Scene, StandardMaterial,
+    Scene, Sound, StandardMaterial,
     Vector3
 } from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
@@ -25,9 +25,16 @@ export class Enemy extends Character {
 
     private static baseMesh:AbstractMesh|null;
 
+    public static shootSound:Sound;
+
+    public static destroyedSound:Sound;
+
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/small_enemy.glb', '', scene)).meshes[0];
         this.baseMesh.getChildMeshes().forEach(it => it.isVisible = false);
+
+        this.shootSound = await Util.loadSound("assets/enemy_shoot.wav", scene);
+        this.destroyedSound = await Util.loadSound("assets/enemy_destroyed.wav", scene);
     }
 
     public constructor(scene:Scene, startPosition:Vector3) {
@@ -107,6 +114,9 @@ export class Enemy extends Character {
                             pc.pos.subtract(shotSrc).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
                             this.actorManager!.currentDifficultySettings.enemyDamage
                         ));
+
+                        Enemy.shootSound.play();
+
                         this.attackCharge = 0;
                     }
                 }
@@ -129,6 +139,7 @@ export class Enemy extends Character {
 
         if (this.hp <= 0){
             this.actorManager!.add(new Explosion(this.pos.add(new Vector3(0, -1, 0)), 80, new Color3(1, 0.5, 0)));
+            Enemy.destroyedSound.play();
         }
 
         return amount;

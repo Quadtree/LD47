@@ -9,6 +9,7 @@ import {
     Vector3
 } from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
+import {PowerUp} from "./PowerUp";
 
 export enum CardConsoleColor {
     Red,
@@ -66,6 +67,8 @@ export class CardConsole extends Actor {
                 console.log(`Collecting ${this.cardConsoleColor}`)
                 this.collected = true
                 pc.cards.push(this.cardConsoleColor);
+
+                PowerUp.hitSound.play()
             }
         }
     }

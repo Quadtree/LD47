@@ -5,3 +5,4 @@ yarn-error.log
 declarations
 *.blend1
 .idea
+*:Zone.Identifier

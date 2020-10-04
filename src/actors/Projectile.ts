@@ -1,8 +1,9 @@
 import {Actor} from "../am/Actor";
-import {AbstractMesh, Color3, PointLight, Scene, StandardMaterial, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Color3, PointLight, Scene, Sound, StandardMaterial, Vector3} from "@babylonjs/core";
 import {Util} from "../Util";
 import {Character} from "./Character";
 import {Explosion} from "./Explosion";
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 
 export abstract class Projectile extends Actor {
     private mesh:AbstractMesh|null = null;
@@ -11,6 +12,12 @@ export abstract class Projectile extends Actor {
     private life:number = 10;
 
     private scene:Scene|null = null;
+
+    public static hitSound:Sound;
+
+    public static async load(scene:Scene){
+        this.hitSound = await Util.loadSound("assets/shot_hit.wav", scene);
+    }
 
     public constructor(public pos:Vector3, public vel:Vector3, public readonly damage:number){
         super();
@@ -87,6 +94,8 @@ export abstract class Projectile extends Actor {
             color = this.mesh!.material.emissiveColor;
         }
 
-        this.actorManager!.add(new Explosion(this.pos, 1, color))
+        this.actorManager!.add(new Explosion(this.pos, 1, color));
+
+        Projectile.hitSound.play();
     }
 }

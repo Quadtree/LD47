@@ -2,7 +2,7 @@ import {Character} from "./Character";
 import {Scene} from "@babylonjs/core/scene";
 import {PlayerProjectile} from "./PlayerProjectile";
 import {Util} from "../Util";
-import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, StandardMaterial, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Color3, Matrix, PBRMaterial, Quaternion, Sound, StandardMaterial, Vector3} from "@babylonjs/core";
 import {EnemySpawnPoint} from "./EnemySpawnPoint";
 import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
@@ -48,9 +48,13 @@ export class PlayerCharacter extends Character {
 
     public static gameStarted = false;
 
+    public static shootSound:Sound;
+
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/player_gun.glb', '', scene)).meshes[0];
         this.baseMesh.getChildMeshes().forEach(it => it.isVisible = false);
+
+        this.shootSound = await Util.loadSound("assets/player_shoot.wav", scene);
     }
 
     public constructor(scene:Scene, canvas:HTMLCanvasElement|null){
@@ -326,12 +330,23 @@ export class PlayerCharacter extends Character {
                 this.powerUps.includes(PowerUpType.Attack)
             ));
 
+            PlayerCharacter.shootSound.play();
+
             this.battery -= this.actorManager!.currentDifficultySettings.energyCostPerShot;
         }
 
         if (this.respawnTimer !== null){
 
         }
+    }
+
+
+    protected getCameraOffset(): Vector3 {
+        if (this.respawnTimer !== null && this.respawnTimer < PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
+            return new Vector3(0, -this.respawnTimer * 0.75, 0);
+        }
+
+        return super.getCameraOffset();
     }
 
     protected pointerDown() {

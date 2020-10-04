@@ -26,6 +26,7 @@ import {PowerUp, PowerUpType} from "./actors/PowerUp";
 import {Enemy} from "./actors/Enemy";
 import {StartDoor} from "./actors/StartDoor";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
+import {Projectile} from "./actors/Projectile";
 
 export let canvasGlobal:HTMLCanvasElement;
 
@@ -81,6 +82,8 @@ export class GameMain {
             PlayerCharacter.load(this._scene),
             StartDoor.load(this._scene),
             ExitDoor.load(this._scene),
+            PowerUp.load(this._scene),
+            Projectile.load(this._scene),
         ]);
 
         this.actorManager.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, this._scene);

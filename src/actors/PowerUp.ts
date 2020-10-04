@@ -3,12 +3,13 @@ import {
     Color3,
     MeshBuilder, PBRMaterial,
     PBRMetallicRoughnessMaterial,
-    Scene, StandardMaterial,
+    Scene, Sound, StandardMaterial,
     Texture,
     Vector3
 } from "@babylonjs/core";
 import {Actor} from "../am/Actor";
 import {PlayerCharacter} from "./PlayerCharacter";
+import {Util} from "../Util";
 
 export enum PowerUpType {
     Charge,
@@ -29,6 +30,12 @@ export class PowerUp extends Actor {
     private mesh:AbstractMesh;
 
     private collected:boolean = false;
+
+    public static hitSound:Sound;
+
+    public static async load(scene:Scene){
+        this.hitSound = await Util.loadSound("assets/powerup.wav", scene);
+    }
 
     public constructor(private pos:Vector3, private scene:Scene, private type:PowerUpType){
         super();
@@ -76,6 +83,8 @@ export class PowerUp extends Actor {
                 console.log(`Collecting ${this.type}`)
                 this.collected = true
                 pc.powerUps.push(this.type);
+
+                PowerUp.hitSound.play()
             }
         }
     }

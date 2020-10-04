@@ -166,10 +166,14 @@ export class Character extends Actor
 
     }
 
+    protected getCameraOffset():Vector3 {
+        return new Vector3(0,0,0);
+    }
+
     public update(delta:number){
         let v3:btVector3 = this.character.getGhostObject().getWorldTransform().getOrigin();
 
-        this.camera.position = this.toBJVector3(v3).add(new Vector3(0, 0.75, 0));
+        this.camera.position = this.toBJVector3(v3).add(new Vector3(0, 0.75, 0)).add(this.getCameraOffset());
 
         const walkSpeed = 0.25;
 
