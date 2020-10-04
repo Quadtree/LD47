@@ -184,14 +184,14 @@ export class PlayerCharacter extends Character {
 
         const difficulties:DifficultySettings[] = [
             {
-                enemyDamage: 0.15,
+                enemyDamage: 0.13,
                 enemyProjectileSpeed: 30,
                 playerDamage: 0.4,
                 energyCostPerShot: 0.06,
                 enemyTurnRate: 0.03,
             },
             {
-                enemyDamage: 0.3,
+                enemyDamage: 0.23,
                 enemyProjectileSpeed: 40,
                 playerDamage: 0.2,
                 energyCostPerShot: 0.06,

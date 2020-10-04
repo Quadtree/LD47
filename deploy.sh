@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# docker-compose up build
+docker-compose up build
 BASE='/var/www/dyn/lighttpd/ld/ld47/html5/'
 ssh sigma "mkdir -p ${BASE}dist/"
 ssh sigma "mkdir -p ${BASE}assets/"
