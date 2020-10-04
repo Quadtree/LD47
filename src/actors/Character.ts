@@ -179,7 +179,9 @@ export class Character extends Actor
         this.character.setWalkDirection(blWalkDirection);
 
         if (this.jump){
-            this.character.jump(this.toBLVector3(new Vector3(0, 20, 0)));
+            const v3 = this.toBLVector3(new Vector3(0, 20, 0));
+            this.character.jump(v3);
+            Util.destroyVector(v3);
             this.jump = false;
         }
 

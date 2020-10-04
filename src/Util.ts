@@ -53,16 +53,17 @@ export class Util
 
     public static toBLVector3(v3:Vector3):btVector3
     {
-        Util.totalVectors++;
-
-        if (Util.totalVectors > 100){
-            console.log(`POSSIBLE MEMORY LEAK ${Util.totalVectors}`);
-        }
-
         const ret = new Ammo.btVector3();
         ret.setX(v3.x);
         ret.setY(v3.y);
         ret.setZ(-v3.z);
+
+        Util.totalVectors++;
+
+        if (Util.totalVectors > 100){
+            console.log (`POSSIBLE MEMORY LEAK ${Util.totalVectors}`);
+        }
+
         return ret;
     }
 
@@ -91,17 +92,22 @@ export class Util
 
         //console.log(Ammo);
 
-        const cb = new Ammo.ClosestRayResultCallback();
-        const fromBTV = Util.toBLVector3(from);
-        const toBTV = Util.toBLVector3(to);
+        try {
+            var cb = new Ammo.ClosestRayResultCallback();
+            var fromBTV = Util.toBLVector3(from);
+            var toBTV = Util.toBLVector3(to);
 
-        world.rayTest(fromBTV, toBTV, cb);
+            var ret = false;
 
-        const ret = cb.m_collisionObject.ptr != 0;
+            world.rayTest(fromBTV, toBTV, cb);
 
-        Ammo.destroy(cb);
-        this.destroyVector(fromBTV);
-        this.destroyVector(toBTV);
+            ret = cb.m_collisionObject.ptr != 0;
+
+        } finally {
+            if (cb) Ammo.destroy(cb);
+            if (fromBTV) this.destroyVector(fromBTV);
+            if (toBTV) this.destroyVector(toBTV);
+        }
 
         //console.log(cb.m_collisionObject);
 

@@ -138,7 +138,7 @@ export class PlayerCharacter extends Character {
             PlayerCharacter.fader.color = "#000000";
             PlayerCharacter.fader.widthInPixels = 5000;
             PlayerCharacter.fader.heightInPixels = 5000;
-            PlayerCharacter.fader.alpha = 0.5;
+            PlayerCharacter.fader.alpha = 0.0;
 
             this.actorManager!.ui!.addControl(PlayerCharacter.fader);
         }
@@ -177,6 +177,10 @@ export class PlayerCharacter extends Character {
                 this.hp = 1;
                 this.battery = this.maxBattery;
 
+                this.camera.rotation = new Vector3(0, Math.PI / 2, 0);
+            }
+
+            if (this.respawnTimer < PlayerCharacter.RESPAWN_PHASE_2_WAKING_UP){
                 for (const aa of this.actorManager!.actors){
                     if (aa instanceof StartDoor){
                         aa.openAmount = 0;
@@ -184,7 +188,7 @@ export class PlayerCharacter extends Character {
                 }
             }
 
-            if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_4_DONE){
+            if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_3_DOOR_OPENING){
                 this.respawnTimer = null;
             }
         }
