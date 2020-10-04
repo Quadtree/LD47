@@ -16,6 +16,7 @@ export interface DifficultySettings {
     enemyProjectileSpeed:number,
     playerDamage:number,
     energyCostPerShot:number,
+    enemyTurnRate:number,
 }
 
 export class ActorManager
@@ -114,6 +115,7 @@ export class ActorManager
         enemyProjectileSpeed: 10,
         playerDamage: 0.3,
         energyCostPerShot: 0.06,
+        enemyTurnRate: 0.03,
     }
 
     public ui:AdvancedDynamicTexture|null = null;

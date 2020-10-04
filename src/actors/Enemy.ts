@@ -92,9 +92,8 @@ export class Enemy extends Character {
 
                 const dist = 1 - Math.pow(Quaternion.Dot(currentRotation, targetRotation), 2);
 
-                if (dist < 0.01) {
-
-                    if (deltaPos.length() > 8) {
+                if (dist < 0.02) {
+                    if (Vector3.Distance(pc.pos, this.pos) > 12) {
                         this.moveForward = true;
                     } else {
                         this.moveForward = false;

@@ -166,21 +166,24 @@ export class PlayerCharacter extends Character {
         const difficulties:DifficultySettings[] = [
             {
                 enemyDamage: 0.15,
-                enemyProjectileSpeed: 20,
-                playerDamage: 0.3,
+                enemyProjectileSpeed: 30,
+                playerDamage: 0.4,
                 energyCostPerShot: 0.06,
+                enemyTurnRate: 0.03,
             },
             {
                 enemyDamage: 0.3,
-                enemyProjectileSpeed: 30,
-                playerDamage: 0.2,
+                enemyProjectileSpeed: 40,
+                playerDamage: 0.3,
                 energyCostPerShot: 0.06,
+                enemyTurnRate: 0.10,
             },
             {
                 enemyDamage: 0.45,
-                enemyProjectileSpeed: 30,
-                playerDamage: 0.2,
-                energyCostPerShot: 0.08,
+                enemyProjectileSpeed: 40,
+                playerDamage: 0.3,
+                energyCostPerShot: 0.06,
+                enemyTurnRate: 0.20,
             },
         ]
 
@@ -220,7 +223,14 @@ export class PlayerCharacter extends Character {
     update(delta: number) {
         this.acceptingInput = PlayerCharacter.gameStarted;
 
-        if (!PlayerCharacter.gameStarted) return;
+        if (!PlayerCharacter.gameStarted){
+            for (const aa of this.actorManager!.actors){
+                if (aa instanceof StartDoor){
+                    aa.openAmount = 0;
+                }
+            }
+            return;
+        }
 
         if ((this.hp <= 0 || this.battery < this.actorManager!.currentDifficultySettings.energyCostPerShot) && this.respawnTimer === null){
             this.respawnTimer = 0;
