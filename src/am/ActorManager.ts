@@ -2,6 +2,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { Actor } from "./Actor";
 import { ActorManagerPlugin } from "./ActorManagerPlugin";
 import { Engine } from "@babylonjs/core/Engines/engine";
+import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
 export class ActorManager
 {
@@ -100,4 +101,6 @@ export class ActorManager
         playerDamage: 0.3,
         energyCostPerShot: 0.06,
     }
+
+    public ui:AdvancedDynamicTexture|null = null;
 }

@@ -25,6 +25,7 @@ import {GLTFFileLoader} from "@babylonjs/loaders";
 import {PowerUp, PowerUpType} from "./actors/PowerUp";
 import {Enemy} from "./actors/Enemy";
 import {StartDoor} from "./actors/StartDoor";
+import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
 export class GameMain {
     private _canvas: HTMLCanvasElement;
@@ -77,6 +78,8 @@ export class GameMain {
             PlayerCharacter.load(this._scene),
             StartDoor.load(this._scene),
         ]);
+        
+        this.actorManager.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, this._scene);
 
         let chr = new PlayerCharacter(this._scene, this._canvas);
         this.actorManager.add(chr);

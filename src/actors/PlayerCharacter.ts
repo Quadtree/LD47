@@ -8,6 +8,7 @@ import {PowerUpType} from "./PowerUp";
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 import {AdvancedDynamicTexture, Image, Rectangle} from "@babylonjs/gui";
 import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
+import {StartDoor} from "./StartDoor";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -18,6 +19,7 @@ export class PlayerCharacter extends Character {
     private static RESPAWN_PHASE_1_FALLING_UNC = 2;
     private static RESPAWN_PHASE_2_WAKING_UP = 4;
     private static RESPAWN_PHASE_3_DOOR_OPENING = 6;
+    private static RESPAWN_PHASE_4_DONE = 8;
 
     private battery:number = 1;
 
@@ -39,7 +41,7 @@ export class PlayerCharacter extends Character {
 
     private static baseMesh:AbstractMesh|null;
 
-    private static fader:Rectangle;
+    private static fader:Rectangle|null = null;
 
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/player_gun.glb', '', scene)).meshes[0];
@@ -130,6 +132,17 @@ export class PlayerCharacter extends Character {
     }
 
     update(delta: number) {
+        if (PlayerCharacter.fader == null){
+            PlayerCharacter.fader = new Rectangle("");
+            PlayerCharacter.fader.background = "#000000";
+            PlayerCharacter.fader.color = "#000000";
+            PlayerCharacter.fader.widthInPixels = 5000;
+            PlayerCharacter.fader.heightInPixels = 5000;
+            PlayerCharacter.fader.alpha = 0.5;
+
+            this.actorManager!.ui!.addControl(PlayerCharacter.fader);
+        }
+
         this.healthBar!.scaling.set(1, 1, Math.max(this.hp, 0));
         this.energyBar!.scaling.set(1, 1, Math.max(this.battery / this.maxBattery, 0));
 
@@ -150,12 +163,28 @@ export class PlayerCharacter extends Character {
         }
 
         if (this.respawnTimer !== null){
-            this.respawnTimer -= delta;
-            if (this.respawnTimer <= 0){
+            this.respawnTimer += delta;
+
+            if (this.respawnTimer < PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
+                // player is still falling unconscious
+                PlayerCharacter.fader.alpha = Math.min(Math.max(PlayerCharacter.fader.alpha + delta / 2, 0), 1);
+            }
+
+            if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_1_FALLING_UNC){
+                PlayerCharacter.fader.alpha = Math.min(Math.max(PlayerCharacter.fader.alpha - delta / 2, 0), 1);
+
                 this.pos = PlayerCharacter.START_POS
                 this.hp = 1;
                 this.battery = this.maxBattery;
 
+                for (const aa of this.actorManager!.actors){
+                    if (aa instanceof StartDoor){
+                        aa.openAmount = 0;
+                    }
+                }
+            }
+
+            if (this.respawnTimer >= PlayerCharacter.RESPAWN_PHASE_4_DONE){
                 this.respawnTimer = null;
             }
         }
@@ -214,7 +243,7 @@ export class PlayerCharacter extends Character {
 
         if (this.hp <= 0 && this.respawnTimer === null){
             EnemySpawnPoint.despawnAll(this.actorManager!);
-            this.respawnTimer = 1;
+            this.respawnTimer = 0;
         }
 
         return amount;

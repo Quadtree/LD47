@@ -7,7 +7,7 @@ export class StartDoor extends Actor {
 
     private static baseMesh:AbstractMesh|null;
 
-    private openAmount = 0;
+    public openAmount = 0;
 
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/pod_bay_door.glb', '', scene)).meshes[0];
