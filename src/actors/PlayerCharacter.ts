@@ -10,6 +10,7 @@ import {AdvancedDynamicTexture, Image, Rectangle} from "@babylonjs/gui";
 import {TextBlock} from "@babylonjs/gui/2D/controls/textBlock";
 import {StartDoor} from "./StartDoor";
 import {ActorManager} from "../am/ActorManager";
+import {ExitDoor} from "./ExitDoor";
 
 export class PlayerCharacter extends Character {
     private wantsToShoot:boolean = false;
@@ -202,6 +203,12 @@ export class PlayerCharacter extends Character {
                 this.camera.rotation = new Vector3(0, Math.PI / 2, 0);
 
                 if (this.needsFullRespawn){
+                    for (const aa of this.actorManager!.actors){
+                        if (aa instanceof ExitDoor){
+                            aa.currentDate.setTime(aa.currentDate.getTime() + (Math.random() * 0.2 + 0.8) * 86400 * 14 * 1000);
+                        }
+                    }
+
                     EnemySpawnPoint.despawnAll(this.actorManager!);
                     EnemySpawnPoint.respawnAll(this.actorManager!);
                     this.needsFullRespawn = false;

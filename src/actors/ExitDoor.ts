@@ -12,6 +12,8 @@ export class ExitDoor extends Actor {
 
     private textBox:TextBlock|null = null;
 
+    public currentDate:Date = new Date(2073, 9, 26, 9, 21, 57, 320);
+
     private static baseMesh:AbstractMesh|null;
 
     public static async load(scene:Scene){
@@ -41,6 +43,8 @@ export class ExitDoor extends Actor {
                 this.uiTex = new AdvancedDynamicTexture("", 512, 512, scene);
                 this.textBox = new TextBlock("", "TEST\nTEST");
                 this.textBox.color = '#ffffff';
+                this.textBox.fontSizeInPixels = 35;
+                this.textBox.fontStyle = 'bold';
                 this.uiTex.addControl(this.textBox);
 
                 child.material = (child.material as PBRMaterial).clone("");
@@ -60,9 +64,16 @@ export class ExitDoor extends Actor {
     update(delta: number) {
         super.update(delta);
 
+        this.currentDate.setTime(this.currentDate.getTime() + delta * 1000);
+
         const pcList = this.actorManager!.actors.filter(it => it instanceof PlayerCharacter);
         if (pcList.length){
             const pc = pcList[0] as PlayerCharacter;
+
+            this.textBox!.text = `POD BAY\n\n` +
+                `${this.currentDate.getFullYear()}/${(this.currentDate.getMonth()+1).toString().padStart(2, '0')}/${this.currentDate.getDate().toString().padStart(2, '0')}` +
+                ` ${this.currentDate.getHours().toString().padStart(2, '0')}:${this.currentDate.getMinutes().toString().padStart(2, '0')}:${this.currentDate.getSeconds().toString().padStart(2, '0')}` +
+                `\n\nNeed ${3 - pc.cards.length} more keys to open`;
 
             if (pc.pos.subtract(this.pos).length() < 4){
                 if (pc.cards.includes(CardConsoleColor.Red) && pc.cards.includes(CardConsoleColor.Green) && pc.cards.includes(CardConsoleColor.Blue) && !ExitDoor.shownWinScreen){
