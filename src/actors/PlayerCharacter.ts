@@ -166,6 +166,11 @@ export class PlayerCharacter extends Character {
 
         if (!PlayerCharacter.gameStarted) return;
 
+        if ((this.hp <= 0 || this.battery < this.actorManager!.currentDifficultySettings.energyCostPerShot) && this.respawnTimer === null){
+            this.respawnTimer = 0;
+            this.needsFullRespawn = true;
+        }
+
         this.healthBar!.scaling.set(1, 1, Math.max(this.hp, 0));
         this.energyBar!.scaling.set(1, 1, Math.max(this.battery / this.maxBattery, 0));
 
@@ -279,11 +284,6 @@ export class PlayerCharacter extends Character {
     takeDamage(amount: number): number {
         this.hp -= amount;
         console.log(`PC took ${amount} damage, HP is now ${this.hp}`);
-
-        if (this.hp <= 0 && this.respawnTimer === null){
-            this.respawnTimer = 0;
-            this.needsFullRespawn = true;
-        }
 
         return amount;
     }
