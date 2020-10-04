@@ -77,6 +77,7 @@ export class GameMain {
             Enemy.load(this._scene),
             PlayerCharacter.load(this._scene),
             StartDoor.load(this._scene),
+            ExitDoor.load(this._scene),
         ]);
 
         this.actorManager.ui = AdvancedDynamicTexture.CreateFullscreenUI("", true, this._scene);

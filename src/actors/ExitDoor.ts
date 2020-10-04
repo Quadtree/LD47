@@ -1,13 +1,29 @@
 import {Actor} from "../am/Actor";
-import {Vector3} from "@babylonjs/core";
+import {AbstractMesh, Scene, Vector3} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 import {CardConsoleColor} from "./CardConsole";
 import {Image} from "@babylonjs/gui";
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader";
 
 export class ExitDoor extends Actor {
+    private mesh:AbstractMesh|null = null;
+
+    private static baseMesh:AbstractMesh|null;
+
+    public static async load(scene:Scene){
+        this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/exit_door.glb', '', scene)).meshes[0];
+        this.baseMesh.getChildMeshes().forEach(it => it.isVisible = false);
+    }
 
     public constructor(private pos:Vector3){
         super();
+
+        this.mesh = ExitDoor.baseMesh!.clone("", null, false)!;
+        this.mesh.getChildMeshes().forEach(it => it.isVisible = true);
+
+        this.mesh.position = this.pos;
+        //this.mesh.scaling = new Vector3(1.2, 1.2, 1.2);
+        this.mesh.rotation = new Vector3(0, 0, 0);
     }
 
     private static shownWinScreen = false;
