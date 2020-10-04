@@ -14,6 +14,11 @@ export class PlayerCharacter extends Character {
     private shootCharge:number = 0;
     private hp:number = 1;
     private respawnTimer:number|null = null;
+
+    private static RESPAWN_PHASE_1_FALLING_UNC = 2;
+    private static RESPAWN_PHASE_2_WAKING_UP = 4;
+    private static RESPAWN_PHASE_3_DOOR_OPENING = 6;
+
     private battery:number = 1;
 
     private paralyzedTime = 2;
@@ -33,6 +38,8 @@ export class PlayerCharacter extends Character {
     private static START_POS = new Vector3(0,2,0);
 
     private static baseMesh:AbstractMesh|null;
+
+    private static fader:Rectangle;
 
     public static async load(scene:Scene){
         this.baseMesh = (await SceneLoader.ImportMeshAsync(null, './assets/player_gun.glb', '', scene)).meshes[0];

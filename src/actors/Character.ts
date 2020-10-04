@@ -124,9 +124,9 @@ export class Character extends Actor
                 }
             });
 
-            debugUi = AdvancedDynamicTexture.CreateFullscreenUI('', true, this.scene);
+            //debugUi = AdvancedDynamicTexture.CreateFullscreenUI('', true, this.scene);
             debugUiText = new TextBlock('', 'test')
-            debugUi.addControl(debugUiText)
+            //debugUi.addControl(debugUiText)
             debugUiText.left = -600
             debugUiText.top = -600
             debugUiText.color = '#ffffff'
