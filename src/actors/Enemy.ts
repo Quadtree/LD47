@@ -1,5 +1,5 @@
 import {Character} from "./Character";
-import {AbstractMesh, MeshBuilder, Scene, Vector3} from "@babylonjs/core";
+import {AbstractMesh, MeshBuilder, Quaternion, Scene, Vector3} from "@babylonjs/core";
 import {PlayerCharacter} from "./PlayerCharacter";
 import {Util} from "../Util";
 import {EnemyProjectile} from "./EnemyProjectile";
@@ -48,26 +48,33 @@ export class Enemy extends Character {
             const towardsEnemyNormalized = deltaPos.scale(-1).normalize();
 
             if (!Util.rayTest(this.scene, this.pos.add(towardsPCNormalized.scale(2)), pc.pos.add(towardsEnemyNormalized.scale(2)))){
-                this.camera.rotation.y = Math.atan2(deltaPos.x, deltaPos.z);
-
-                if (deltaPos.length() > 8){
-                    this.moveForward = true;
-                } else {
-                    this.moveForward = false;
-                }
+                const targetRotation = Quaternion.FromEulerAngles(0, Math.atan2(deltaPos.x, deltaPos.z), 0);
+                const currentRotation = Quaternion.FromEulerVector(this.camera.rotation);
+                this.camera.rotation = Quaternion.Slerp(currentRotation, targetRotation, 0.03).toEulerAngles();
 
                 canSeePC = true;
                 this.attackCharge += delta;
 
-                if (this.attackCharge >= 1){
-                    const shotSrc = this.pos.add(new Vector3(0, -0.55, 0));
+                const dist = 1 - Math.pow(Quaternion.Dot(currentRotation, targetRotation), 2);
 
-                    this.actorManager!.add(new EnemyProjectile(
-                        shotSrc,
-                        pc.pos.subtract(shotSrc).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
-                        this.actorManager!.currentDifficultySettings.enemyDamage
-                    ));
-                    this.attackCharge = 0;
+                if (dist < 0.01) {
+
+                    if (deltaPos.length() > 8) {
+                        this.moveForward = true;
+                    } else {
+                        this.moveForward = false;
+                    }
+
+                    if (this.attackCharge >= 1) {
+                        const shotSrc = this.pos.add(new Vector3(0, -0.55, 0));
+
+                        this.actorManager!.add(new EnemyProjectile(
+                            shotSrc,
+                            pc.pos.subtract(shotSrc).normalize().scale(this.actorManager!.currentDifficultySettings.enemyProjectileSpeed),
+                            this.actorManager!.currentDifficultySettings.enemyDamage
+                        ));
+                        this.attackCharge = 0;
+                    }
                 }
             }
         }
