@@ -85,6 +85,11 @@ export class Character extends Actor
             this.camera.attachControl(this.canvas, false);
         }
 
+        this.camera.keysDown = [];
+        this.camera.keysLeft = [];
+        this.camera.keysUp = [];
+        this.camera.keysRight = [];
+
         let ajsp = this.scene.getPhysicsEngine()!.getPhysicsPlugin() as AmmoJSPlugin
 
         let startTransform = new Ammo.btTransform();
@@ -119,11 +124,11 @@ export class Character extends Actor
                     if (ed.type == KeyboardEventTypes.KEYDOWN || ed.type == KeyboardEventTypes.KEYUP) {
                         const evt = ed.event as KeyboardEvent;
                         const down = ed.type == KeyboardEventTypes.KEYDOWN;
-                        if (evt.keyCode == Keys.W) this.moveForward = down;
-                        if (evt.keyCode == Keys.S) this.moveBackward = down;
-                        if (evt.keyCode == Keys.A) this.moveLeft = down;
-                        if (evt.keyCode == Keys.D) this.moveRight = down;
-                        if (evt.keyCode == Keys.Space) this.jump = down;
+                        if (evt.key == 'w' || evt.key == 'ArrowUp') this.moveForward = down;
+                        if (evt.key == 's' || evt.key == 'ArrowDown') this.moveBackward = down;
+                        if (evt.key == 'a' || evt.key == 'ArrowLeft') this.moveLeft = down;
+                        if (evt.key == 'd' || evt.key == 'ArrowRight') this.moveRight = down;
+                        if (evt.key == ' ') this.jump = down;
                         if (evt.key == 'u' && Util.CHEATS_ENABLED){
                             this.cards.push(0);
                             this.cards.push(1);
